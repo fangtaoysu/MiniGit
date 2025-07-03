@@ -1,4 +1,3 @@
-#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 #include <cctype>
 #include "../include/commit.h"

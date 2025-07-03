@@ -1,7 +1,6 @@
 #ifndef __COMMIT_H__
 #define __COMMIT_H__
 
-#include <iostream>
 #include <unordered_map>
 #include <sstream>
 

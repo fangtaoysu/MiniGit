@@ -33,7 +33,8 @@ const std::stringstream& Commit::get_commit_item() const {
  */
 const std::string Commit::get_hash() const {
     unsigned char hash[SHA_DIGEST_LENGTH];
-    SHA1(reinterpret_cast<const unsigned char*>(msg_.c_str()), msg_.size(), hash);
+    std::string hash_source = msg_ + get_current_timestamp();
+    SHA1(reinterpret_cast<const unsigned char*>(hash_source.c_str()), hash_source.size(), hash);
     std::stringstream ss;
     for (int i = 0; i < SHA_DIGEST_LENGTH; ++i) {
         ss << std::hex << std::setw(2) << std::setfill('0')

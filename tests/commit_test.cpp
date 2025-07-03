@@ -2,8 +2,11 @@
 #include <gtest/gtest.h>
 #include <cctype>
 #include "../include/commit.h"
+#include <chrono>
+#include <thread>
 
 
+/**测试commit类构造的item */
 TEST(CommitTest, CommitItemFormat) {
     GTEST_LOG_(INFO) << "测试仓库首个commit item";
     const std::string init_parameter_msg("init: test_msg");
@@ -78,4 +81,44 @@ TEST(CommitTest, CommitItemFormat) {
         EXPECT_TRUE(isdigit(c));
     }
     EXPECT_EQ(anyone_msg, anyone_parameter_msg);
+}
+
+/**测试commit类生成哈希的唯一性 */
+TEST(CommitTest, CommitHashUniqueness) {
+    Commit commit1("same commit", "", {});
+    // 延时2s
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    Commit commit2("same commit", "", {});
+    const std::stringstream& result1 = commit1.get_commit_item();
+    GTEST_LOG_(INFO) << "commit_init: " << result1.str();
+    // 读commit的成员
+    std::string father_ref1, current_ref1;
+    std::stringstream ss1(result1.str());
+    // 反序列化读取commit中的成员
+    size_t father_ref_len1, current_ref_len1;
+    ss1 >> father_ref_len1;
+    father_ref1.resize(father_ref_len1);
+    ss1.ignore(1);
+    ss1.read(&father_ref1[0], father_ref_len1);
+    ss1 >> current_ref_len1;
+    current_ref1.resize(current_ref_len1);
+    ss1.ignore(1);
+    ss1.read(&current_ref1[0], current_ref_len1);
+
+    const std::stringstream& result2 = commit2.get_commit_item();
+    GTEST_LOG_(INFO) << "commit_init: " << result2.str();
+    // 读commit的成员
+    std::string father_ref2, current_ref2;
+    std::stringstream ss2(result2.str());
+    // 反序列化读取commit中的成员
+    size_t father_ref_len2, current_ref_len2;
+    ss2 >> father_ref_len2;
+    father_ref2.resize(father_ref_len2);
+    ss2.ignore(1);
+    ss2.read(&father_ref2[0], father_ref_len2);
+    ss2 >> current_ref_len2;
+    current_ref2.resize(current_ref_len2);
+    ss2.ignore(1);
+    ss2.read(&current_ref2[0], current_ref_len2);
+    EXPECT_NE(current_ref1, current_ref2);
 }

@@ -22,3 +22,22 @@ MiniGit - 一个简化版的版本控制系统，模仿Git的基本功能，包�
     - 读取`MakeFile`文件
     - 检查文件变更：对比源文件（.cpp）和目标文件（.o）的时间戳，如果不一致则重新编译，否则跳过编译
     - 编译和链接生成可执行文件
+
+测试：`ctest`
+
+想输出更详细的信息（如日志）:`ctest --verbose`
+
+# 遇到的问题
+
+## issue1:undefined reference to 'main'
+
+> Anaconda 安装的 GTest 与系统 GTest 版本不兼容，导致符号解析失败（typeinfo for testing::Test）
+解决方案：显式指定了系统 GTest 路径
+`set(GTest_DIR "/usr/lib/x86_64-linux-gnu/cmake/GTest")`
+
+## commit的一条信息如果用流存储，那么使用什么作为分隔符呢
+
+> commit的一条信息包括父节点的哈希值、当前节点的哈希值、当前时间戳和commit信息，由于commit信息中可以存在空格或回车，因此使用传统的空格和回车作为流的分隔符是不合理的
+解决方案：采用结构序列化的方式
+长度前缀序列化：将下一个字符串的长度和空格存入其中（序列化），读取的时候先读下一个字符的长度，就能根据长度读取指定的字符串；
+本项目采用了json序列化的方式

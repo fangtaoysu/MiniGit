@@ -23,6 +23,7 @@ add_library(mini_git_lib
     src/mini_git.cpp
     src/repository.cpp
     src/diff_engine.cpp
+    src/utils.cpp
 )
 
 target_include_directories(mini_git_lib

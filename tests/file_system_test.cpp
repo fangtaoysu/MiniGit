@@ -1,3 +1,4 @@
+#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 #include "../include/file_system.h"
 #include <vector>
@@ -59,4 +60,115 @@ TEST(FileSystemTest, AppendFileContent) {
     if (fs::exists(file_path)) {
         fs::remove(file_path);
     }
+}
+
+/**测试 get_all_files 函数 */
+TEST(FileSystemTest, GetAllFiles) {
+    std::vector<fs::path> files = FileSystem::get_all_files();
+    
+    // 只能通过肉眼验证结果
+    ASSERT_FALSE(files.empty());
+    for (const auto& file : files) {
+        GTEST_LOG_(INFO) << "Found file: " << file << std::endl;
+    }    
+}
+
+/** 测试 read_file 函数 */
+TEST(FileSystemTest, ReadFile) {
+    // 准备测试文件
+    const fs::path test_dir = fs::current_path() / "test_temp";
+    fs::create_directories(test_dir);
+    const fs::path test_file = test_dir / "test_file.txt";
+    const std::string test_content = "Hello MiniGit!\nThis is a test file.\n";
+    
+    // 写入测试文件
+    std::ofstream(test_file) << test_content;
+
+    // ---------------------------
+    // 测试1：正常读取文件
+    // ---------------------------
+    {
+        std::stringstream contents = FileSystem::read_file(test_file);
+        
+        // 验证内容匹配
+        std::stringstream expected;
+        expected << test_content;
+        EXPECT_EQ(contents.str(), expected.str());
+        
+        // 验证读取后流状态正常
+        EXPECT_FALSE(contents.fail());
+        EXPECT_TRUE(contents.good());
+    }
+
+    // ---------------------------
+    // 测试2：读取不存在的文件
+    // ---------------------------
+    {
+        fs::path not_exist_file = test_dir / "not_exist.txt";
+        EXPECT_THROW({
+            FileSystem::read_file(not_exist_file);
+        }, std::runtime_error);
+    }
+
+    // ---------------------------
+    // 测试3：读取目录（非法操作）
+    // ---------------------------
+    {
+        EXPECT_THROW({
+            FileSystem::read_file(test_dir);
+        }, std::runtime_error);
+    }
+
+    // ---------------------------
+    // 测试4：读取二进制文件
+    // ---------------------------
+    {
+        const fs::path binary_file = test_dir / "binary.data";
+        const std::vector<uint8_t> binary_data{0x00, 0x01, 0x02, 0xFF};
+        
+        // 写入二进制数据
+        std::ofstream(binary_file, std::ios::binary)
+            .write(reinterpret_cast<const char*>(binary_data.data()), binary_data.size());
+        
+        // 读取并验证
+        std::stringstream contents = FileSystem::read_file(binary_file);
+        std::string read_data = contents.str();
+        
+        EXPECT_EQ(read_data.size(), binary_data.size());
+        EXPECT_EQ(read_data[0], '\0');
+        EXPECT_EQ(static_cast<uint8_t>(read_data[3]), 0xFF);
+    }
+
+    // 清理测试文件
+    fs::remove_all(test_dir);
+}
+
+
+
+/** 测试build_path 函数功能 */
+TEST(FileSystemTest, BuildPath) {
+    fs::path right_path("dir/path/file.txt");
+    fs::path test_path = FileSystem::build_path("dir", "path", "file.txt");
+
+    EXPECT_EQ(test_path, right_path);
+}
+
+/** 测试copy_file_to 函数功能 */
+TEST(FileSystemTest, BasicCopy) {
+    // 准备测试文件
+    std::ofstream("test_src.txt") << "test content";
+    
+    // 测试复制
+    EXPECT_TRUE(FileSystem::copy_file_to("test_src.txt", "test_dir/copy.txt"));
+    EXPECT_TRUE(fs::exists("test_dir/copy.txt"));
+    
+    // 验证内容
+    std::ifstream in("test_dir/copy.txt");
+    std::string content((std::istreambuf_iterator<char>(in)), 
+                       std::istreambuf_iterator<char>());
+    EXPECT_EQ(content, "test content");
+    
+    // 清理
+    fs::remove_all("test_dir");
+    fs::remove("test_src.txt");
 }

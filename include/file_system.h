@@ -16,6 +16,7 @@ class FileSystem {
         std::stringstream& read_file() const;
         size_t static file_size(const std::string& file_path);
         bool static is_text_file(const std::string& file_path);
+        bool static append_file_content(const std::string& file_path, const std::string& append_content);
 
     private:
         const std::string& file_path_;

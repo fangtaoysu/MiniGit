@@ -1,4 +1,5 @@
 #include "../include/file_system.h"
+#include <iostream>
 
 
 FileSystem::FileSystem(const std::string& file_path)
@@ -25,43 +26,59 @@ size_t FileSystem::file_size(const std::string& file_path) {
  * @return true-是UTF-8文本文件，false-不是文本文件或读取失败
  */
 bool FileSystem::is_text_file(const std::string& file_path) {
-    // 1. 检查路径是否存在且是普通文件
-    std::filesystem::path path(file_path);
-    if (!std::filesystem::exists(path)) {
-        return false;
-    }
+    namespace fs = std::filesystem;
+    fs::path path(file_path);
 
-    // 2. 如果是目录直接返回false
-    if (std::filesystem::is_directory(path)) {
-        return false;
-    }
+    if (!fs::exists(path) || fs::is_directory(path)) return false;
 
-    // 3. UTF-8内容验证
     std::ifstream file(file_path, std::ios::binary);
     if (!file) return false;
 
-    char buffer[1024];
-    int expected_bytes = 0; // 用于UTF-8多字节字符追踪
-    
-    while (file.read(buffer, sizeof(buffer))) {
-        for (int i = 0; i < file.gcount(); ++i) {
-            unsigned char c = buffer[i];
-            
-            if (expected_bytes > 0) {
-                // 检查UTF-8后续字节格式 (10xxxxxx)
-                if ((c & 0xC0) != 0x80) return false;
-                expected_bytes--;
-            } else {
-                // 单字节ASCII (0xxxxxxx)
-                if (c <= 0x7F) continue;
-                
-                // 多字节UTF-8首字节
-                if ((c & 0xE0) == 0xC0) expected_bytes = 1;  // 2字节
-                else if ((c & 0xF0) == 0xE0) expected_bytes = 2; // 3字节
-                else if ((c & 0xF8) == 0xF0) expected_bytes = 3; // 4字节
-                else return false; // 非法UTF-8起始字节
-            }
+    const size_t max_check_size = 8000;
+    char buffer[max_check_size];
+    file.read(buffer, sizeof(buffer));
+    std::streamsize bytes_read = file.gcount();
+
+    if (bytes_read == 0) return false;
+
+    int nontext_count = 0;
+
+    for (std::streamsize i = 0; i < bytes_read; ++i) {
+        unsigned char c = buffer[i];
+        if (c == 0) return false; // null 字节直接返回 false
+        if (c < 0x09) { // ASCII 控制字符（除了 tab）也视为二进制痕迹
+            ++nontext_count;
         }
     }
-    return expected_bytes == 0; // 确保没有截断的多字节字符
+
+    // 如果非文本字符占比大于 5%，认为是非文本文件
+    double ratio = static_cast<double>(nontext_count) / bytes_read;
+    return ratio < 0.05;
+}
+
+/**追加文件内容到末尾 */
+bool FileSystem::append_file_content(const std::string& file_path, const std::string& append_content) {
+    namespace fs = std::filesystem;
+
+    fs::path path(file_path);
+    fs::path parent = path.parent_path();
+
+    try {
+        // 父目录不存在，则递归创建
+        if (!parent.empty() && !fs::exists(parent)) {
+            fs::create_directories(parent);
+        }
+
+        std::ofstream ofs(file_path, std::ios::app);
+        if (!ofs) {
+            std::cerr << "打开文件失败：" << file_path << "\n";
+            return false;
+        }
+        
+        ofs << append_content;
+        return true;
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "文件系统错误：" << e.what() << "\n";
+        return false;
+    }
 }

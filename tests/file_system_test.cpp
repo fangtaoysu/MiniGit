@@ -64,7 +64,9 @@ TEST(FileSystemTest, AppendFileContent) {
 
 /**测试 get_all_files 函数 */
 TEST(FileSystemTest, GetAllFiles) {
-    std::vector<fs::path> files = FileSystem::get_all_files();
+    // 用项目路径测试
+    const std::string project_path("/data/fangtao/MiniGit/tmp");
+    std::vector<fs::path> files = FileSystem::get_all_files(project_path);
     
     // 只能通过肉眼验证结果
     ASSERT_FALSE(files.empty());
@@ -144,31 +146,53 @@ TEST(FileSystemTest, ReadFile) {
 }
 
 
-
-/** 测试build_path 函数功能 */
-TEST(FileSystemTest, BuildPath) {
-    fs::path right_path("dir/path/file.txt");
-    fs::path test_path = FileSystem::build_path("dir", "path", "file.txt");
-
-    EXPECT_EQ(test_path, right_path);
-}
-
 /** 测试copy_file_to 函数功能 */
 TEST(FileSystemTest, BasicCopy) {
     // 准备测试文件
-    std::ofstream("test_src.txt") << "test content";
-    
-    // 测试复制
-    EXPECT_TRUE(FileSystem::copy_file_to("test_src.txt", "test_dir/copy.txt"));
-    EXPECT_TRUE(fs::exists("test_dir/copy.txt"));
-    
+    std::string src = "test_src.txt";
+    std::ofstream(src) << "test content";
+
+    // 设置目标路径
+    fs::path dst("/data/fangtao/MiniGit/tmp/.mgit/object/35/99cdd13328b2b21e29a95405c301b9313b7c346");
+
+    // 测试复制函数
+    EXPECT_TRUE(FileSystem::copy_file_to(src, dst));
+    EXPECT_TRUE(fs::exists(dst));
+
     // 验证内容
-    std::ifstream in("test_dir/copy.txt");
-    std::string content((std::istreambuf_iterator<char>(in)), 
-                       std::istreambuf_iterator<char>());
+    std::ifstream copy_file_ifs(dst);
+    std::string content((std::istreambuf_iterator<char>(copy_file_ifs)),
+                        std::istreambuf_iterator<char>());
     EXPECT_EQ(content, "test content");
-    
+
     // 清理
-    fs::remove_all("test_dir");
-    fs::remove("test_src.txt");
+    fs::remove(src);
+    fs::remove(dst);
+}
+
+TEST(FileSystemTest, GetFileSize_ValidFile) {
+    fs::path test_path("/data/fangtao/MiniGit/tmp/tests/commit_test.cpp");
+    GTEST_LOG_(INFO) << "Exists: " << fs::exists(test_path) << "\n";
+    int64_t size = FileSystem::get_file_size(test_path);
+    EXPECT_GT(size, 0);  // 文件大小应大于0
+}
+
+TEST(FileSystemTest, GetFileSize_InvalidFile) {
+    fs::path non_existent = "non_existent_file.txt";
+    int64_t size = FileSystem::get_file_size(non_existent);
+    EXPECT_EQ(size, -1);  // 不存在的文件应返回 -1
+}
+
+TEST(FileSystemTest, GetFileTimestamp_ValidFile) {
+    fs::path test_path("/data/fangtao/MiniGit/tmp/tests/commit_test.cpp");
+    GTEST_LOG_(INFO) << "Exists: " << fs::exists(test_path) << "\n";
+    int64_t timestamp = FileSystem::get_file_timestamp(test_path);
+    EXPECT_GT(timestamp, 0);  // 应返回有效时间戳
+    EXPECT_LE(std::to_string(timestamp).length(), 10);  // 返回 10 位以内时间戳
+}
+
+TEST(FileSystemTest, GetFileTimestamp_InvalidFile) {
+    fs::path non_existent = "non_existent_file.txt";
+    int64_t timestamp = FileSystem::get_file_timestamp(non_existent);
+    EXPECT_EQ(timestamp, -1);  // 不存在的文件应返回 -1
 }

@@ -20,9 +20,7 @@ class FileSystem {
         static size_t file_size(const std::string& file_path);
         static bool is_text_file(const std::string& file_path);
         static bool append_file_content(const std::string& file_path, const std::string& append_content);
-        static std::vector<fs::path> get_all_files();
-        template <typename... Args>
-        static fs::path build_path(Args&&... args);
+        static std::vector<fs::path> get_all_files(const std::string& mgit_path);
         static bool copy_file_to(const fs::path& src, const fs::path& dst);
         static int64_t get_file_size(const fs::path& file_path);
         static int64_t get_file_timestamp(const fs::path& file_path);
@@ -32,12 +30,5 @@ class FileSystem {
         bool static is_inside_excluded(const fs::path& path, const fs::path& exclude_dir); 
 };
 
-/**将多个字符串组合成文件路径 */
-template <typename... Args>
-fs::path FileSystem::build_path(Args&&... args) {
-    fs::path result;
-    ((result /= std::forward<Args>(args)), ...);
-    return result;
-}
 
 #endif

@@ -1,6 +1,6 @@
 #include "../include/file_system.h"
 #include <iostream>
-#include <gtest/gtest.h>
+#include <chrono>
 
 
 
@@ -129,14 +129,13 @@ bool FileSystem::is_inside_excluded(const fs::path& path, const fs::path& exclud
 }
 
 /**获取 .mgit目录下所有层级的文件路径 */
-std::vector<fs::path> FileSystem::get_all_files() {
-    const std::string& mgit_path = "../.git";
+std::vector<fs::path> FileSystem::get_all_files(const std::string& mgit_path) {
     std::vector<fs::path> files;
     // 建一个临时的build
     fs::path build_abs = fs::absolute("../build");
     
     try {
-        fs::path mgit_abs = fs::absolute(mgit_path).lexically_normal();
+        fs::path mgit_abs = fs::absolute(fs::path(mgit_path) / ".mgit").lexically_normal();
         fs::path parent_dir = mgit_abs.parent_path();
         
         if (!fs::exists(parent_dir)) {
@@ -145,24 +144,33 @@ std::vector<fs::path> FileSystem::get_all_files() {
         
         for (const auto& entry : fs::recursive_directory_iterator(parent_dir)) {        
             fs::path abs_path = fs::absolute(entry.path()).lexically_normal();
-            fs::path rel_path = fs::relative(abs_path, parent_dir);
             
             if (is_inside_excluded(abs_path, mgit_abs) || is_inside_excluded(abs_path, build_abs) || fs::is_directory(abs_path)) {
                 continue;
             }
-            files.push_back(rel_path);
+            files.push_back(abs_path);
         }
     } catch (const fs::filesystem_error& e) {
-        GTEST_LOG_(ERROR) << "Filesystem error: " << e.what() << std::endl;
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
     }
     
     return files;
 }
 
+/**把文件src的内容复制到文件dst中
+ * src和dst必须都是绝对路径
+ */
 bool FileSystem::copy_file_to(const fs::path& src, const fs::path& dst) {
     try {
-        fs::create_directories(dst.parent_path());
-
+        if (!fs::exists(dst)) {
+            fs::create_directories(dst.parent_path());
+            // 创建空文件
+            std::ofstream file(dst);
+            if (!file) {
+                throw std::runtime_error("无法创建文件：" + dst.string());
+            }
+        }
+        
         fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
         return true;
     } catch (const fs::filesystem_error& e) {
@@ -184,15 +192,18 @@ int64_t FileSystem::get_file_timestamp(const fs::path& file_path) {
     if (!fs::exists(file_path, ec) || ec) {
         return -1;
     }
+
     auto ftime = fs::last_write_time(file_path, ec);
     if (ec) {
         return -1;
     }
 
-    auto sctp = std::chrono::time_point_cast<std::chrono::seconds>(ftime);
-    int64_t timestamp = sctp.time_since_epoch().count();
+    // 将 file_time_type 转为 system_clock::time_point
+    using namespace std::chrono;
 
-    // 确保是10位时间戳
-    const int64_t ten_digits = 1000000000;
-    return timestamp % ten_digits;
+    auto sctp = time_point_cast<system_clock::duration>(
+        ftime - fs::file_time_type::clock::now() + system_clock::now()
+    );
+
+    return duration_cast<seconds>(sctp.time_since_epoch()).count();
 }

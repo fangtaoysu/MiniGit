@@ -4,24 +4,14 @@
 #include <sstream>
 
 
-struct CommitObject{
-    std::string father_ref;
-    std::string current_ref;
-    std::string current_timestamp;
-    std::string msg;
-};
-
 class Commit {
     public:
-        Commit(const std::string& msg, const std::string& father_ref);
+        Commit(const std::string& project_path);
         ~Commit() {}
-        const CommitObject& get_commit_object() const;
-        void run();
+        const std::string run(const std::string& msg, std::string father_ref);
 
     private:
-        const std::string& msg_;
-        CommitObject commit_object_;
-        const std::string father_ref_;
+        const std::string& project_path_;
 };
 
 #endif

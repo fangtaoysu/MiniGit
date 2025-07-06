@@ -9,12 +9,12 @@ using json = nlohmann::json;
 namespace fs = std::filesystem;
 class Index {
     public:
-        Index(const std::string& mgit_path);
-        void add() const;
+        Index(const std::string& project_path);
+        void add(const std::vector<fs::path>* files) const;
+        json read_index() const;
         
     private:
-        const std::string& mgit_path_;
-        json read_index() const;
+        const std::string project_path_;
         void write_to_index(json file_info) const;
         fs::path index_path_;
 

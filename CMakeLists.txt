@@ -20,32 +20,34 @@ find_package(GTest REQUIRED)  # 必须放在OpenSSL之后
 add_library(mini_git_lib
     src/commit.cpp
     src/file_system.cpp
-    src/mini_git.cpp
     src/diff_engine.cpp
     src/utils.cpp
     src/index.cpp
+    src/repository.cpp
+    src/config.cpp
 )
 
 target_include_directories(mini_git_lib
     PUBLIC 
     include
     ${OPENSSL_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party
 )
 
 target_link_libraries(mini_git_lib
     PRIVATE
     OpenSSL::Crypto
 )
-# ========== 构建可执行文件 mini_git ==========
-add_executable(mini_git
-    src/repository.cpp
+# ========== 项目入口 mini_git ==========
+add_executable(main
+    main.cpp
 )
 
-target_link_libraries(mini_git
+target_link_libraries(main
     PRIVATE mini_git_lib
 )
 
-set_target_properties(mini_git PROPERTIES
+set_target_properties(main PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 

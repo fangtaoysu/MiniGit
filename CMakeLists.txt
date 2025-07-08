@@ -26,11 +26,18 @@ add_library(mini_git_lib
     src/repository.cpp
     src/config.cpp
     src/object_db.cpp
+    src/command_parser/parser.cpp
+    src/command_parser/command_dispatcher.cpp
+    src/command_parser/commands/cmd_init.cpp
+    src/command_parser/commands/cmd_add.cpp
+    src/command_parser/commands/cmd_commit.cpp
 )
 
 target_include_directories(mini_git_lib
     PUBLIC 
     include
+    include/command_parser
+    include/command_parser/commands
     ${OPENSSL_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party
 )

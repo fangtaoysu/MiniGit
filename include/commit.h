@@ -17,6 +17,7 @@ class Commit {
 
         void save_to_objects(const std::string& father_ref, const std::string& msg);
         void save_to_HEAD(const std::string& father_ref, const std::string& msg);
+        const std::string get_father_ref();
 };
 
 #endif

@@ -1,11 +1,12 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
-#include "./command_parser/types.h"
+#include "types.h"
 
 
 class StateMachineParser {
     public:
+        StateMachineParser()=default;
         ParsedCommand parse(const std::string& input);
 
     private:

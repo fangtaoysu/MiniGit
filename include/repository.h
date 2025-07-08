@@ -9,7 +9,7 @@
 class Repository {
     public:
         Repository();
-        void init_repository(const std::string& project_path);
+        void init_repository();
         inline const std::string& get_project_path() {
             return project_path_;
         }

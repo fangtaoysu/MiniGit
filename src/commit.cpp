@@ -16,11 +16,30 @@ Commit::Commit (const std::string& project_path)
     : project_path_(project_path), current_ref_(""), current_timestamp_("") {
 }
 
+const std::string Commit::get_father_ref() {
+    fs::path HEAD_path = fs::path(project_path_) / ".mgit" / "logs" / "HEAD";
+    std::cout << HEAD_path << std::endl;
+    const std::string father_ref(40, '0');
+    if (!fs::exists(HEAD_path)) {
+        return father_ref;
+    }
+    // 读最后一行
+    std::ifstream file(HEAD_path);
+    std::string line, last_line;
+    while (std::getline(file, line)) {
+        last_line = line;
+    }
+    // 读最后一行的哈希（上一个commit的哈希）作为当前的父哈希
+    size_t first = last_line.find(' ');
+    size_t second = last_line.find(' ', first+1);
+    return last_line.substr(first + 1, second - first - 1);
+}
+
 /**将本条commit对象保存在`.mgit/logs/HEAD`中 */
 const std::string Commit::run(const std::string& msg, std::string father_ref) {
     // 检查父节点
-    father_ref = father_ref.empty() ? std::string(40, '0') : father_ref;
-     // 打上当前的时间戳
+    father_ref = get_father_ref();
+    // 打上当前的时间戳
     current_timestamp_ = Utils::get_current_timestamp();
     // 生成本条commit的哈希
     const std::string hash_source = msg + current_timestamp_;

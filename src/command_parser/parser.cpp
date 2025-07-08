@@ -1,6 +1,5 @@
 #include "../../include/command_parser/parser.h"
 #include "../../include/utils.h"
-#include <exception>
 #include <iostream>
 #include <unordered_set>
 

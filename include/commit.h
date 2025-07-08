@@ -12,6 +12,11 @@ class Commit {
 
     private:
         const std::string& project_path_;
+        std::string current_ref_;
+        std::string current_timestamp_;
+
+        void save_to_objects(const std::string& father_ref, const std::string& msg);
+        void save_to_HEAD(const std::string& father_ref, const std::string& msg);
 };
 
 #endif

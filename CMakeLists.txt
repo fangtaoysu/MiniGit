@@ -25,6 +25,7 @@ add_library(mini_git_lib
     src/index.cpp
     src/repository.cpp
     src/config.cpp
+    src/object_db.cpp
 )
 
 target_include_directories(mini_git_lib

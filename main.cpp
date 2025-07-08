@@ -13,7 +13,7 @@ int main() {
     index_object.add(nullptr);
     Commit commit_object(project_path);
     const std::string father_ref = commit_object.run("mgit init", "");
-    const std::string next_ref = commit_object.run("feat:new add", father_ref);
+    const std::string next_ref = commit_object.run("feat:new add\n -look at me \n- 是不是两行", father_ref);
     std::cout << "next ref:" << next_ref << std::endl;
     return 0;
 }

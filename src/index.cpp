@@ -1,6 +1,7 @@
 #include "../include/index.h"
 #include "../include/file_system.h"
 #include "../include/utils.h"
+#include "../include/object_db.h"
 #include <fstream>
 #include <filesystem>
 
@@ -32,6 +33,7 @@ void Index::write_to_index(json file_info) const {
 }
 
 void Index::add(const std::vector<fs::path>* files) const {
+    ObjectDB db(project_path_);
     // 1. 读原有的index文件，如果index为空，那么构造一个空字典
     json index_info = read_index();
 
@@ -54,10 +56,7 @@ void Index::add(const std::vector<fs::path>* files) const {
             hash_value = Utils::get_hash(file.string());
         }
         // 2.2 得到哈希后把文件保存在对应哈希所指的路径（./object/）
-        const std::string file_path_start = std::string(hash_value.begin(), hash_value.begin()+2);
-        const std::string file_path_end = std::string(hash_value.begin()+2, hash_value.end());
-        const fs::path dst_path = fs::path(project_path_) / ".mgit/object" / file_path_start / file_path_end;
-        FileSystem::copy_file_to(file, dst_path);
+        const fs::path& dst_path = db.write(hash_value, file);
         int64_t size =  FileSystem::get_file_size(file);
         int64_t modified = FileSystem::get_file_timestamp(file);
         // 2.3 得到这个文件的其他信息

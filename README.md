@@ -31,6 +31,7 @@ git log
 
 ```shell
 |
+|- config # 保存仓库的配置信息
 |- logs/
     |- HEAD # 保存所有当前所指分支的所有commit对象（一阶段）
     |- refs/ # 保存本地所有分支，文件名就是分支名（二阶段）
@@ -83,6 +84,15 @@ git log
 通过哈希 `.git/objects/前2位/后38位`的规则找到该文件，这个文件中存储着文件大小，文件内容。
 
 # 差缺补漏
+
+## git
+
+```shell
+# 查看git对象数据库的内容
+git cat-file -p 哈希
+# 查看git指定commit的整个目录结构
+git ls-tree -r 哈希 # -r 递归
+```
 
 ## CMake
 

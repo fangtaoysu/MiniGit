@@ -21,4 +21,4 @@ class StateMachineParser {
         bool is_git_command(const std::string& cmd);
 };
 
-#endif
+#endif   

@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -O0 CMakeFiles/main.dir/main.cpp.o -o bin/main  libmini_git_lib.a /usr/lib/x86_64-linux-gnu/libcrypto.so 

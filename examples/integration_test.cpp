@@ -34,8 +34,8 @@ int main() {
     Commit commit_object(project_path);
     const std::string msg1("my mini git init, happy");
     const std::string msg2("feat: complish add and commit");
-    const std::string father_ref1 = commit_object.run(msg1, "");
-    const std::string father_ref2 = commit_object.run(msg2, father_ref1);
+    commit_object.run(msg1);
+    commit_object.run(msg2);
     std::cout << "git commit 完成，请检查logs/HEAD文件" << std::endl;
     return 0;
 }

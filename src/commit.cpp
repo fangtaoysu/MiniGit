@@ -19,7 +19,6 @@ Commit::Commit (const std::string& project_path)
 
 const std::string Commit::get_father_ref() {
     fs::path HEAD_path = fs::path(project_path_) / ".mgit" / "logs" / "HEAD";
-    std::cout << HEAD_path << std::endl;
     const std::string father_ref(40, '0');
     if (!fs::exists(HEAD_path)) {
         return father_ref;
@@ -40,7 +39,7 @@ const std::string Commit::get_father_ref() {
 void Commit::run(const std::string& msg) {
     // 检查暂存区是否有内容
     Index index_object(project_path_);
-    if (!is_index_changed(index_object.get_entries())) {
+    if (!is_index_changed(index_object.get_index().at("entries"))) {
         return;
     }
     // 检查父节点
@@ -53,17 +52,17 @@ void Commit::run(const std::string& msg) {
     // 将完整的commit对象保存到 .gmit/objects 中
     save_to_objects(father_ref, msg);
     save_to_HEAD(father_ref, msg);
+    index_object.reset_index_entries();
 }
 
 bool Commit::is_index_changed(const json& entries) const {
-    if (entries.empty()) {
+    if (entries.at("counts") == 0) {
         std::cerr << "no changes added to commit (use \"git add\" and/or \"git commit -a\")\n";
         return false;
     }
-    std::cout << entries.size() << "files changed\n";
-    for (auto & entry : entries) {
-        std::cout << entry.at("mode") << "mode"
-                  << entry.at("file_path") << std::endl;
+    std::cout << " " << entries.at("counts") << " files changed\n";
+    for (auto & file_path : entries.at("create_files")) {
+        std::cout << " create mode " << file_path << std::endl;
     }
     return true;
 }

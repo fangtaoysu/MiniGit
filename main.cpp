@@ -60,9 +60,8 @@ void origin_cmd_test() {
     Index index_object(project_path);
     index_object.add(nullptr);
     Commit commit_object(project_path);
-    const std::string father_ref = commit_object.run("mgit init", "");
-    const std::string next_ref = commit_object.run("feat:new add\n -look at me \n- 是不是两行", father_ref);
-    std::cout << "next ref:" << next_ref << std::endl;
+    commit_object.run("mgit init");
+    commit_object.run("feat:new add\n -look at me \n- 是不是两行");
 }
 
 int main() {

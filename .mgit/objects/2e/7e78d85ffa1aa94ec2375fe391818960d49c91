@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -O0 CMakeFiles/test_commit.dir/tests/commit_test.cpp.o -o bin/test_commit  libmini_git_lib.a /usr/lib/x86_64-linux-gnu/libcrypto.so /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a 

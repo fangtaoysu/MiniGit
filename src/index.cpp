@@ -13,13 +13,13 @@ Index::Index(const std::string& project_path)
 }
 
 /**将 .mgit/index 文件读到json中 */
-json Index::read_index() const {
+json Index::get_index_entries() const {
     json index = {};
     if (!fs::exists(index_path_)) {
         return index;
     }
     std::ifstream(index_path_) >> index;
-    return index;
+    return index.at("entries");
 }
 
 /**将Json文件写入 .mgit/index 中*/
@@ -35,7 +35,7 @@ void Index::write_to_index(json file_info) const {
 void Index::add(const std::vector<fs::path>* files) const {
     ObjectDB db(project_path_);
     // 1. 读原有的index文件，如果index为空，那么构造一个空字典
-    json index_info = read_index();
+    json index_info = get_index_entries();
 
     // 2. 得到需要add的文件
     std::vector<fs::path> all_files;
@@ -65,8 +65,11 @@ void Index::add(const std::vector<fs::path>* files) const {
             {"size", size},
             {"modified", modified}
         };
+        index_info["entries"] = {
+            {"mode", }, // create modified
+            {"file_path", file}
+        };
     }
-    index_info["entries"] = *files;
     // 并写回到这个字典
     write_to_index(index_info);
 }

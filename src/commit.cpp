@@ -5,6 +5,7 @@
 #include "../include/utils.h"
 #include "../include/object_db.h"
 #include "../include/config.h"
+#include "index.h"
 #include <iostream>
 
 
@@ -36,9 +37,14 @@ const std::string Commit::get_father_ref() {
 }
 
 /**将本条commit对象保存在`.mgit/logs/HEAD`中 */
-const std::string Commit::run(const std::string& msg, std::string father_ref) {
+void Commit::run(const std::string& msg) {
+    // 检查暂存区是否有内容
+    Index index_object(project_path_);
+    if (!is_index_changed(index_object.get_entries())) {
+        return;
+    }
     // 检查父节点
-    father_ref = get_father_ref();
+    const std::string father_ref = get_father_ref();
     // 打上当前的时间戳
     current_timestamp_ = Utils::get_current_timestamp();
     // 生成本条commit的哈希
@@ -47,8 +53,19 @@ const std::string Commit::run(const std::string& msg, std::string father_ref) {
     // 将完整的commit对象保存到 .gmit/objects 中
     save_to_objects(father_ref, msg);
     save_to_HEAD(father_ref, msg);
-    
-    return current_ref_;
+}
+
+bool Commit::is_index_changed(const json& entries) const {
+    if (entries.empty()) {
+        std::cerr << "no changes added to commit (use \"git add\" and/or \"git commit -a\")\n";
+        return false;
+    }
+    std::cout << entries.size() << "files changed\n";
+    for (auto & entry : entries) {
+        std::cout << entry.at("mode") << "mode"
+                  << entry.at("file_path") << std::endl;
+    }
+    return true;
 }
 
 /** 将这条commit相关的信息存入object数据库 */

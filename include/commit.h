@@ -2,15 +2,19 @@
 #define __COMMIT_H__
 
 #include <sstream>
+#include <vector>
+#include "../thrid_party/nlohmann/json.hpp"
 
 
+using json = nlohmann::json;
 class Commit {
     public:
         Commit(const std::string& project_path);
         ~Commit() {}
-        const std::string run(const std::string& msg, std::string father_ref);
-
+        void run(const std::string& msg);
+        
     private:
+        bool is_index_changed(const json& entries) const;
         const std::string& project_path_;
         std::string current_ref_;
         std::string current_timestamp_;

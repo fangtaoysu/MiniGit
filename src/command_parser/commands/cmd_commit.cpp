@@ -6,13 +6,11 @@
 
 
 void CmdCommit::execute(const ParsedCommand& cmd, Repository& repo) {
-    const std::string project_path = repo.get_project_path();
-    Index index_object(project_path);
     if (!is_needed_execute(cmd)) {
         return;
     }
-    Commit commit_obejct(project_path);
-    commit_obejct.run(cmd.options.at("-m"), "");
+    Commit commit_obejct(repo.get_project_path());
+    commit_obejct.run(cmd.options.at("-m"));
 }
 
 bool CmdCommit::is_needed_execute(const ParsedCommand& cmd) {
@@ -22,8 +20,5 @@ bool CmdCommit::is_needed_execute(const ParsedCommand& cmd) {
         std::cerr << "Aborting commit due to empty commit message.\n";
         return false;
     }
-    // 检查暂存区中是否有内容
-    
-    if ()
     return true;
 }

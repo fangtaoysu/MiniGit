@@ -1,0 +1,116 @@
+[
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/commit.cpp.o -c /data/fangtao/MiniGit/src/commit.cpp",
+  "file": "/data/fangtao/MiniGit/src/commit.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/commit.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/file_system.cpp.o -c /data/fangtao/MiniGit/src/file_system.cpp",
+  "file": "/data/fangtao/MiniGit/src/file_system.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/file_system.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/diff_engine.cpp.o -c /data/fangtao/MiniGit/src/diff_engine.cpp",
+  "file": "/data/fangtao/MiniGit/src/diff_engine.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/diff_engine.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/utils.cpp.o -c /data/fangtao/MiniGit/src/utils.cpp",
+  "file": "/data/fangtao/MiniGit/src/utils.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/utils.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/index.cpp.o -c /data/fangtao/MiniGit/src/index.cpp",
+  "file": "/data/fangtao/MiniGit/src/index.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/index.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/repository.cpp.o -c /data/fangtao/MiniGit/src/repository.cpp",
+  "file": "/data/fangtao/MiniGit/src/repository.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/repository.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/config.cpp.o -c /data/fangtao/MiniGit/src/config.cpp",
+  "file": "/data/fangtao/MiniGit/src/config.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/config.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/object_db.cpp.o -c /data/fangtao/MiniGit/src/object_db.cpp",
+  "file": "/data/fangtao/MiniGit/src/object_db.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/object_db.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/command_parser/parser.cpp.o -c /data/fangtao/MiniGit/src/command_parser/parser.cpp",
+  "file": "/data/fangtao/MiniGit/src/command_parser/parser.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/command_parser/parser.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/command_parser/command_dispatcher.cpp.o -c /data/fangtao/MiniGit/src/command_parser/command_dispatcher.cpp",
+  "file": "/data/fangtao/MiniGit/src/command_parser/command_dispatcher.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/command_parser/command_dispatcher.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_init.cpp.o -c /data/fangtao/MiniGit/src/command_parser/commands/cmd_init.cpp",
+  "file": "/data/fangtao/MiniGit/src/command_parser/commands/cmd_init.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_init.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_add.cpp.o -c /data/fangtao/MiniGit/src/command_parser/commands/cmd_add.cpp",
+  "file": "/data/fangtao/MiniGit/src/command_parser/commands/cmd_add.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_add.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_commit.cpp.o -c /data/fangtao/MiniGit/src/command_parser/commands/cmd_commit.cpp",
+  "file": "/data/fangtao/MiniGit/src/command_parser/commands/cmd_commit.cpp",
+  "output": "CMakeFiles/mini_git_lib.dir/src/command_parser/commands/cmd_commit.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/main.dir/main.cpp.o -c /data/fangtao/MiniGit/main.cpp",
+  "file": "/data/fangtao/MiniGit/main.cpp",
+  "output": "CMakeFiles/main.dir/main.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/test_commit.dir/tests/commit_test.cpp.o -c /data/fangtao/MiniGit/tests/commit_test.cpp",
+  "file": "/data/fangtao/MiniGit/tests/commit_test.cpp",
+  "output": "CMakeFiles/test_commit.dir/tests/commit_test.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/test_file_system.dir/tests/file_system_test.cpp.o -c /data/fangtao/MiniGit/tests/file_system_test.cpp",
+  "file": "/data/fangtao/MiniGit/tests/file_system_test.cpp",
+  "output": "CMakeFiles/test_file_system.dir/tests/file_system_test.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/test_index.dir/tests/index_test.cpp.o -c /data/fangtao/MiniGit/tests/index_test.cpp",
+  "file": "/data/fangtao/MiniGit/tests/index_test.cpp",
+  "output": "CMakeFiles/test_index.dir/tests/index_test.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/test_utils.dir/tests/utils_test.cpp.o -c /data/fangtao/MiniGit/tests/utils_test.cpp",
+  "file": "/data/fangtao/MiniGit/tests/utils_test.cpp",
+  "output": "CMakeFiles/test_utils.dir/tests/utils_test.cpp.o"
+},
+{
+  "directory": "/data/fangtao/MiniGit/build",
+  "command": "/usr/bin/clang++ -I/data/fangtao/MiniGit/include -I/data/fangtao/MiniGit/include/command_parser -I/data/fangtao/MiniGit/include/command_parser/commands -I/data/fangtao/MiniGit/third_party -g -O0 -std=c++17 -o CMakeFiles/integration_test.dir/examples/integration_test.cpp.o -c /data/fangtao/MiniGit/examples/integration_test.cpp",
+  "file": "/data/fangtao/MiniGit/examples/integration_test.cpp",
+  "output": "CMakeFiles/integration_test.dir/examples/integration_test.cpp.o"
+}
+]

@@ -1,0 +1,5 @@
+# ninja log v5
+1	101	1751471890105186287	CMakeFiles/mini_git_lib.dir/src/file_system.cpp.o	81f894c618b64783
+1	555	1751471890555321669	CMakeFiles/mini_git_lib.dir/src/commit.cpp.o	fa33c4b2cfd39deb
+555	618	1751471890625342726	libmini_git_lib.a	a3ce1d738ec6b729
+1	728	1751471890725372811	CMakeFiles/test_commit.dir/tests/commit_test.cpp.o	1e1e76474ebec8b9

@@ -1,0 +1,114 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MiniGit",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "integration_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-integration_test-Debug-335e6fd922ea478cb1f9.json",
+					"name" : "integration_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "main::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-main-Debug-79289d013f3345bbb4d8.json",
+					"name" : "main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mini_git_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mini_git_lib-Debug-788122f463719eaeb0d3.json",
+					"name" : "mini_git_lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_commit::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_commit-Debug-301b777a5c252466793a.json",
+					"name" : "test_commit",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_file_system::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_file_system-Debug-07656f753652e0037ce2.json",
+					"name" : "test_file_system",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_index::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_index-Debug-8f80858c6a808924b51f.json",
+					"name" : "test_index",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_utils::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_utils-Debug-30f5073d7abe5dca2c39.json",
+					"name" : "test_utils",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/data/fangtao/MiniGit/build",
+		"source" : "/data/fangtao/MiniGit"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

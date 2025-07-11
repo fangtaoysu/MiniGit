@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -O0 CMakeFiles/test_utils.dir/tests/utils_test.cpp.o -o bin/test_utils  libmini_git_lib.a /usr/lib/x86_64-linux-gnu/libcrypto.so /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a 

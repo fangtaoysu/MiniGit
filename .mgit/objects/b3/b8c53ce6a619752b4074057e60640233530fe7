@@ -1,0 +1,9 @@
+{
+    "core": {
+        "worktree": "/data/fangtao/MiniGit/build"
+    },
+    "user": {
+        "email": "fangtao@stumail.ysu.edu.cn",
+        "name": "fangtaoysu"
+    }
+}

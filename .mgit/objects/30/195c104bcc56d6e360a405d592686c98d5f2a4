@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -O0 CMakeFiles/integration_test.dir/examples/integration_test.cpp.o -o bin/integration_test  libmini_git_lib.a /usr/lib/x86_64-linux-gnu/libcrypto.so 

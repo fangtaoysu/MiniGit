@@ -1,0 +1,14 @@
+# CMake generated Testfile for 
+# Source directory: /data/fangtao/MiniGit
+# Build directory: /data/fangtao/MiniGit/build
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(CommitTest "/data/fangtao/MiniGit/build/bin/test_commit")
+set_tests_properties(CommitTest PROPERTIES  _BACKTRACE_TRIPLES "/data/fangtao/MiniGit/CMakeLists.txt;146;add_test;/data/fangtao/MiniGit/CMakeLists.txt;0;")
+add_test(FileSystemTest "/data/fangtao/MiniGit/build/bin/test_file_system")
+set_tests_properties(FileSystemTest PROPERTIES  _BACKTRACE_TRIPLES "/data/fangtao/MiniGit/CMakeLists.txt;147;add_test;/data/fangtao/MiniGit/CMakeLists.txt;0;")
+add_test(IndexTest "/data/fangtao/MiniGit/build/bin/test_index")
+set_tests_properties(IndexTest PROPERTIES  _BACKTRACE_TRIPLES "/data/fangtao/MiniGit/CMakeLists.txt;148;add_test;/data/fangtao/MiniGit/CMakeLists.txt;0;")
+add_test(UtilsTest "/data/fangtao/MiniGit/build/bin/test_utils")
+set_tests_properties(UtilsTest PROPERTIES  _BACKTRACE_TRIPLES "/data/fangtao/MiniGit/CMakeLists.txt;149;add_test;/data/fangtao/MiniGit/CMakeLists.txt;0;")

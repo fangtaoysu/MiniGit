@@ -1,6 +1,5 @@
 #include "../../../include/command_parser/commands/cmd_commit.h"
 #include "../../../include/commit.h"
-#include "index.h"
 #include <iostream>
 
 

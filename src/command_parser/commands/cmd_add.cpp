@@ -11,7 +11,7 @@ void CmdAdd::execute(const ParsedCommand& cmd, Repository& repo) {
     } else { // 遍历参数，add files的绝对地址
         std::vector<std::filesystem::path> files;
         for (auto & file : cmd.args) {
-            files.push_back(project_path + file);
+            files.push_back(project_path + "/" + file);
         }
         index_obejct.add(&files);
     }

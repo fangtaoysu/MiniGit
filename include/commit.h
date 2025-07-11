@@ -1,8 +1,7 @@
 #ifndef __COMMIT_H__
 #define __COMMIT_H__
 
-#include <sstream>
-#include <vector>
+
 #include "../thrid_party/nlohmann/json.hpp"
 
 

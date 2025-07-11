@@ -6,10 +6,10 @@
 class CmdCommit : public GitCommand {
     public:
         CmdCommit()=default;
-        void execute(const ParsedCommand& cmd, Repository& repo);
+        void execute(const ParsedCommand& cmd, Repository& repo) override;
 
     private:
-
+        bool is_needed_execute(const ParsedCommand& cmd);
 };
 
 #endif

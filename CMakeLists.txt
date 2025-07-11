@@ -6,6 +6,9 @@ project(MiniGit
 
 # 强制使用系统GTest（避开conda环境）
 set(GTest_DIR "/usr/lib/x86_64-linux-gnu/cmake/GTest")  # 关键修改点
+# 关键配置：强制生成调试符号，禁用优化
+set(CMAKE_BUILD_TYPE Debug)          # 启用调试模式
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")  # -g 生成调试符号，-O0 禁用优化
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)

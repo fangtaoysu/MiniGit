@@ -12,7 +12,6 @@ class GitCommand {
         virtual void execute(const ParsedCommand& cmd, Repository& repo)=0;
 
     protected:
-        // void vaildate_options(const ParsedCommand& cmd, const std::pmr::vector<std::string>& allow_options);
 };
 
 #endif

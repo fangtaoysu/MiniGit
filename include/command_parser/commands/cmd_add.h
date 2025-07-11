@@ -5,7 +5,7 @@
 class CmdAdd : public GitCommand {
     public:
         CmdAdd()=default;
-        void execute(const ParsedCommand& cmd, Repository& repo);
+        void execute(const ParsedCommand& cmd, Repository& repo) override;
 
     private:
 };

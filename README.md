@@ -105,9 +105,27 @@ git ls-tree -r 哈希 # -r 递归
     - 检查文件变更：对比源文件（.cpp）和目标文件（.o）的时间戳，如果不一致则重新编译，否则跳过编译
     - 编译和链接生成可执行文件
 
+调试：
+ - cmake -DCMAKE_BUILD_TYPE=Debug -B build
+ - make ..
+
 测试：`ctest`
 
 想输出更详细的信息（如日志）:`ctest --verbose`
+
+## 调试
+
+```shell
+
+gdb ./my_program
+(gdb) b main.cpp:45 # 打断点
+(gdb) run # 运行
+# 单步执行
+(gdb) s # 进入函数
+(gdb) n # 不进入函数
+(gdb) bt # 查看调用栈
+(gdb) p cmd # 打印变量cmd
+```
 
 ## linux命令
 

@@ -2,9 +2,10 @@
 #include "../include/file_system.h"
 #include "../include/utils.h"
 #include "../include/object_db.h"
+#include "../include/thread_pool.h"
 #include <fstream>
 #include <filesystem>
-
+#include <thread>
 
 
 namespace fs = std::filesystem;
@@ -50,42 +51,47 @@ void Index::add(const std::vector<fs::path>* files) const {
         all_files = FileSystem::get_all_files(project_path_);
         files = &all_files;
     }
-    std::string hash_value;\
     size_t count = 0;
     std::vector<std::string> create_files;
-
+    ThreadPool pool(std::thread::hardware_concurrency());
+    std::cout << "thread numbers: " << std::thread::hardware_concurrency() << std::endl;
+    std::mutex mtx;
+    
     for (auto & file : *files) {
-        // 2.1 判断所有类型
-        if (FileSystem::is_text_file(file)) {
-            // 如果是文本文件，读取内容并根据内容生成哈希
-            std::stringstream contents = FileSystem::read_file(file);
-            hash_value = Utils::get_hash(contents.str());
-        } else {
-            // 否则根据文件记录生成哈希
-            hash_value = Utils::get_hash(file.string());
-        }
-        // 2.2 得到哈希后把文件保存在对应哈希所指的路径（./object/）
-        const fs::path& dst_path = db.write(hash_value, file);
-        int64_t size =  FileSystem::get_file_size(file);
-        int64_t modified = FileSystem::get_file_timestamp(file);
-        // 判断是否是修改的文件，是否是新增的文件
-        auto it = index_info.find(dst_path);
-        if (it == index_info.end()) { // 如果当前路径不在其中，说明是新建的文件
-            create_files.push_back(file);
-            count += 1;
-        } else { 
-            // 如果是修改的的文件
-            if (index_info[dst_path]["hash"] != hash_value) {
-                count += 1;
+        pool.enqueue([&, file] {
+            // 计算哈希
+            std::string hash_value;
+            if (FileSystem::is_text_file(file)) {
+                // 如果是文本文件，读取内容并根据内容生成哈希
+                std::stringstream contents = FileSystem::read_file(file);
+                hash_value = Utils::get_hash(contents.str());
+            } else {
+                // 否则根据文件记录生成哈希
+                hash_value = Utils::get_hash(file.string());
             }
-        }
-        // 2.3 得到这个文件的其他信息
-        index_info[dst_path] = {
-            {"hash", hash_value},
-            {"size", size},
-            {"modified", modified}
-        };
+            // 获取文件信息
+            db.write(hash_value, file);
+            int64_t size =  FileSystem::get_file_size(file);
+            int64_t modified = FileSystem::get_file_timestamp(file);
+            // 给index_info和count加锁
+            std::lock_guard<std::mutex> lock(mtx);
+            // 判断是否是修改的文件，是否是新增的文件
+            auto it = index_info.find(file);
+            if (it == index_info.end()) { // 如果当前路径不在其中，说明是新建的文件
+                create_files.push_back(file);
+                count++;
+            } else if (index_info[file]["hash"] != hash_value) {
+                count++; // 如果是修改的的文件
+            }
+            // 2.3 得到这个文件的其他信息
+            index_info[file] = {
+                {"hash", hash_value},
+                {"size", size},
+                {"modified", modified}
+            };
+        });
     }
+    pool.wait(); // 等所有线程都执行结束
     index_info["entries"] = {
         {"counts", count}, // 有变化文件的数量
         {"create_files", create_files}

@@ -29,6 +29,7 @@ add_library(mini_git_lib
     src/repository.cpp
     src/config.cpp
     src/object_db.cpp
+    src/thread_pool.cpp
     src/command_parser/parser.cpp
     src/command_parser/command_dispatcher.cpp
     src/command_parser/commands/cmd_init.cpp

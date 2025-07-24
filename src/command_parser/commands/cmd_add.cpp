@@ -25,7 +25,7 @@ void CmdAdd::mgit_add(const std::vector<std::string>& paths, const std::string& 
                     }
                 }
             } else {
-                files.push_back(project_path);
+                files.push_back(file_path); // 修复issue6
             }
         }
         for (const auto & file : files) {

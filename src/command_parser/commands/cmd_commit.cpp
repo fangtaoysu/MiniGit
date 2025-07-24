@@ -5,19 +5,22 @@
 
 
 void CmdCommit::execute(const ParsedCommand& cmd, Repository& repo) {
-    if (!is_needed_execute(cmd)) {
-        return;
-    }
+    checkout_cmd(cmd);
     Commit commit_obejct(repo.get_project_path());
-    commit_obejct.run(cmd.options.at("-m"));
+    commit_obejct.run(cmd.plain_args[0]);
 }
 
-bool CmdCommit::is_needed_execute(const ParsedCommand& cmd) {
-    // 检查参数问题
-    auto it = cmd.options.find("-m");
-    if (it == cmd.options.end() || it->second.empty()) { // 不容许msg为空
-        std::cerr << "Aborting commit due to empty commit message.\n";
-        return false;
+
+void CmdCommit::checkout_cmd(const ParsedCommand& cmd) {
+    if (cmd.plain_args.empty()) {
+        throw std::runtime_error("commit command too less args");
+    } else if (cmd.plain_args.size() > 1) {
+        throw std::runtime_error("commit command too more args");
     }
-    return true;
+    if (cmd.options.size() != 1 || cmd.options[0] != "-m") {
+        throw std::runtime_error("commit arg error, not found '-m'");
+    } 
+    if (!cmd.key_value_args.empty()) {
+        throw std::runtime_error("commit command error, unvalid args");
+    }
 }

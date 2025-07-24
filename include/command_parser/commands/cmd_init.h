@@ -8,6 +8,7 @@ class CmdInit : public GitCommand {
         CmdInit()=default;
         void execute(const ParsedCommand& cmd, Repository& repo) override;
     private:
+        void checkout_cmd(const ParsedCommand& cmd);
 };
 
 #endif

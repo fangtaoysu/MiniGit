@@ -2,7 +2,7 @@
  * 初始化仓库，加载配置文件 */
 #ifndef __REPOSITORY_H__
 #define __REPOSITORY_H__
-
+#include <unordered_map>
 #include <string>
 
 
@@ -13,6 +13,7 @@ class Repository {
         inline const std::string& get_project_path() {
             return project_path_;
         }
+        void config(const std::unordered_map<std::string, std::string>& info);
 
     private:
         std::string project_path_;

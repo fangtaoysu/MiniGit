@@ -20,12 +20,22 @@ void Repository::init_repository() {
         throw std::runtime_error("项目路径不存在：" + project_path_);
     }
 
-    project_path_ = project_path_;
     const fs::path mgit_path =  fs::path(project_path_) / ".mgit";
     fs::create_directories(mgit_path);
 
     Config config_obejct(project_path_);
-    config_obejct.user_.name = "fangtaoysu";
-    config_obejct.user_.email = "fangtao@stumail.ysu.edu.cn";
+    config_obejct.save_config();
+}
+
+void Repository::config(const std::unordered_map<std::string, std::string>& info) {
+    Config config_obejct(project_path_);
+    for (auto& item : info) {
+        if (item.first == "user.name") {
+            config_obejct.user_.name = item.second;
+        } else if (item.first == "user.email") {
+            config_obejct.user_.email = item.second;
+        }
+    }
+
     config_obejct.save_config();
 }

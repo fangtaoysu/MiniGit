@@ -11,14 +11,16 @@ class StateMachineParser {
 
     private:
         enum class State {
-            Start, Command, Arg, OptionKey, OptionValue
+            Name, Option, ArgKey, ArgValue, PlainArg
         };
         void reset();
         void handle_token(const std::string& token);
-        State state_ = State::Start;
+        State current_state_ = State::Name;
         ParsedCommand current_cmd_;
-        std::string current_option_;
+        std::string current_arg_key_;
+        bool invalid_handle = false;
         bool is_git_command(const std::string& cmd);
+        bool is_key_value_command(const std::string& cmd);
 };
 
 #endif   

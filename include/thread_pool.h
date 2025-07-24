@@ -42,6 +42,7 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
         if (stop_) {
             std::cerr << "enqueue on stopped ThreadPool\n";
         }
+        // forward实现完美转发，如果原来的值是左值，转发后还是左值，如果是右值，转发后还是右值
         tasks_.emplace(std::forward<F>(f));
     }
     condition_.notify_one(); // 通知一个等待的线程有新任务

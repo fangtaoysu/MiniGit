@@ -14,6 +14,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")  # -g 生成调试符号，-O0 禁用优化
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)  # 除非明确需要PIE
 
 # 查找依赖
 find_package(OpenSSL REQUIRED)
@@ -35,6 +36,7 @@ add_library(mini_git_lib
     src/command_parser/commands/cmd_init.cpp
     src/command_parser/commands/cmd_add.cpp
     src/command_parser/commands/cmd_commit.cpp
+    src/command_parser/commands/cmd_config.cpp
 )
 
 target_include_directories(mini_git_lib

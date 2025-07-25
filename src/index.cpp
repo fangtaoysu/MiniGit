@@ -139,7 +139,8 @@ void Index::print_status(const std::vector<fs::path> &to_be_commited, const std:
     std::vector<std::string> tips{
         "Changes to be committed:\n\t(use \"git restore --staged <file>...\" to unstage)\n",
         "Changes not staged for commit:\n\t(use \"git add <file>...\" to update what will be committed)\n\t(use \"git restore <file>...\" to discard changes in working directory)\n",
-        "Untracked files:\n\t(use \"git add <file>...\" to include in what will be committed)\n"
+        "Untracked files:\n\t(use \"git add <file>...\" to include in what will be committed)\n",
+        "nothing to commit, working tree clean\n"
     };
     size_t tips_index = 0;
     
@@ -163,6 +164,10 @@ void Index::print_status(const std::vector<fs::path> &to_be_commited, const std:
     ++tips_index;
     for (auto& file : untrack) {
         std::cout << "\t\t" << file << std::endl;
+    }
+
+    if (to_be_commited.empty() && not_staged.empty() && untrack.empty()) {
+        std::cout << tips[tips_index];
     }
 
 }

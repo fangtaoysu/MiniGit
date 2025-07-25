@@ -37,6 +37,7 @@ add_library(mini_git_lib
     src/command_parser/commands/cmd_add.cpp
     src/command_parser/commands/cmd_commit.cpp
     src/command_parser/commands/cmd_config.cpp
+    src/command_parser/commands/cmd_status.cpp
 )
 
 target_include_directories(mini_git_lib

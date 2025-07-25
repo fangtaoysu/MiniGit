@@ -12,19 +12,23 @@ MiniGit - 一个简化版的版本控制系统，模仿Git的基本功能，包�
 
 ```shell
 # 包含以下可用命令
-# 一阶段
+# 一阶段 - 实现最常用的本地命令
 git init
 git config --local user.name "xxx"
 git config --local user.email "xxx"
 git add xxx
 git commit -m "xxx"
-# 二阶段
-git branch xxx
-git checkout -b xxx
-git checkout xxx
-# 三阶段
+git status
+# 二阶段 - 实现分布式
+git pull
+git push
+git reset --soft xxx
 git branch
+# 三阶段 - 补全漏掉的小功能
 git log
+git diff
+# 考虑加密二进制存储
+git cat-file -p xxx
 ```
 
 ## 文件存储思路

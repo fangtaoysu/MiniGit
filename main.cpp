@@ -5,6 +5,7 @@
 #include "include/command_parser/commands/cmd_add.h"
 #include "include/command_parser/commands/cmd_commit.h"
 #include "include/command_parser/commands/cmd_config.h"
+#include "include/command_parser/commands/cmd_status.h"
 #include "include/repository.h"
 #include "include/index.h"
 #include "include/commit.h"
@@ -35,6 +36,7 @@ void run() {
     dispatcher.register_command("add", std::make_unique<CmdAdd>());
     dispatcher.register_command("commit", std::make_unique<CmdCommit>());
     dispatcher.register_command("config", std::make_unique<CmdConfig>());
+    dispatcher.register_command("status", std::make_unique<CmdStatus>());
     std::string input;
     input = control_input();
     

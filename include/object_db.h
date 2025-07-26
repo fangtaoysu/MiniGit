@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <stdexcept>
 #include "../thrid_party/nlohmann//json.hpp"
+#include "../../utils.h"
 
 
 template<typename> constexpr bool always_false = false;
@@ -28,12 +28,7 @@ class ObjectDB {
 
 template <typename content_type>
 const fs::path ObjectDB::write(const std::string& hash, const content_type& write_contents) {
-    fs::path obj_dir = project_path_ + "/.mgit/objects/" + hash.substr(0, 2);
-    fs::create_directories(obj_dir);
-    if (hash.size() != 40) {
-        throw std::invalid_argument("hash must 40 characters long, hash:" + hash);
-    }
-    const fs::path obj_path = obj_dir / hash.substr(2);
+    const fs::path obj_path = Utils::generate_obj_path(project_path_, hash);
 
     // 根据类型选择写入方式
     if constexpr (std::is_same_v<content_type, fs::path>) {

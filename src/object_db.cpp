@@ -1,5 +1,6 @@
 #include "../include/object_db.h"
 #include <fstream>
+#include <iostream>
 
 
 ObjectDB::ObjectDB(const std::string& project_path)
@@ -39,5 +40,5 @@ bool ObjectDB::write_lines(const std::vector<std::string>& write_contents, const
     for (const std::string& line : write_contents) {
         out << line << "\n";
     }
-    return true;
+    return true; 
 }

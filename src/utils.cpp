@@ -3,11 +3,12 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
+#include <stdexcept>
 
 
 
 /**
- * 根据commit的消息生成哈希值(20位)
+ * 根据commit的消息生成哈希值(40位)
  */
 const std::string Utils::get_hash(const std::string& hash_source) {
     unsigned char hash[SHA_DIGEST_LENGTH];
@@ -82,4 +83,13 @@ std::vector<std::string> Utils::tokenize(const std::string& input) {
     }
 
     return tokens;
+}
+
+fs::path Utils::generate_obj_path(const std::string& project_path, const std::string& hash) {
+    fs::path obj_dir = project_path + "/.mgit/objects/" + hash.substr(0, 2);
+    fs::create_directories(obj_dir);
+    if (hash.size() != 40) {
+        throw std::invalid_argument("hash must 40 characters long, hash:" + hash);
+    }
+    return obj_dir / hash.substr(2);
 }

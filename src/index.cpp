@@ -64,8 +64,9 @@ void Index::add(const std::vector<fs::path>* files) const {
     
     for (auto & file : *files) {
         pool.enqueue([&, file] {
-            // 计算哈希
             std::string hash_value;
+            bool is_commit = true;
+            
             if (FileSystem::is_text_file(file)) {
                 // 如果是文本文件，读取内容并根据内容生成哈希
                 std::stringstream contents = FileSystem::read_file(file);
@@ -74,26 +75,32 @@ void Index::add(const std::vector<fs::path>* files) const {
                 // 否则根据文件记录生成哈希
                 hash_value = Utils::get_hash(file.string());
             }
+
             // 获取文件信息
             db.write(hash_value, file);
             int64_t size =  FileSystem::get_file_size(file);
             int64_t modified = FileSystem::get_file_timestamp(file);
+            
             // 给index_info和count加锁
             std::lock_guard<std::mutex> lock(mtx);
+            
             // 判断是否是修改的文件，是否是新增的文件
             auto it = index_info.find(file);
             if (it == index_info.end()) { // 如果当前路径不在其中，说明是新建的文件
                 create_files.push_back(file);
-                count++;
+                ++count;
+                is_commit = false;
             } else if (index_info[file]["hash"] != hash_value) {
-                count++; // 如果是修改的的文件
+                ++count; // 如果是修改的的文件
+                is_commit = false;
             }
+
             // 2.3 得到这个文件的其他信息
             index_info[file] = {
                 {"hash", hash_value},
                 {"size", size},
                 {"modified", modified},
-                {"is_commit", false}
+                {"is_commit", is_commit}
             };
         });
     }

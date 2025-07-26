@@ -51,7 +51,8 @@ void StateMachineParser::handle_token(const std::string& token) {
 bool StateMachineParser::is_git_command(const std::string& cmd) {
     // 有新命令再加
     static const std::unordered_set<std::string> git_commands = {
-        "init", "add", "commit", "config", "status"
+        "init", "add", "commit", "config", "status",
+        "push"
     };
     return git_commands.count(cmd) > 0;
 }

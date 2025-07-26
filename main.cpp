@@ -37,6 +37,7 @@ void run() {
     dispatcher.register_command("commit", std::make_unique<CmdCommit>());
     dispatcher.register_command("config", std::make_unique<CmdConfig>());
     dispatcher.register_command("status", std::make_unique<CmdStatus>());
+    dispatcher.register_command("push", std::make_unique<>());
     std::string input;
     input = control_input();
     

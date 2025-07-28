@@ -11,7 +11,7 @@ class Index {
     public:
         Index(const std::string& project_path);
         void add(const std::vector<fs::path>* files) const;
-        json get_index() const;
+        static json get_index(const std::string& project_path);
         void reset_index_entries();
         void status();
         

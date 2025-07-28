@@ -2,6 +2,11 @@
 #include <gtest/gtest.h>
 #include <string>
 #include "../include/utils.h"
+#include <fstream>
+
+
+
+
 
 TEST(UtilsTest, SameInputGeneratesSameHash) {
     std::string input = "Hello, world!";
@@ -72,4 +77,54 @@ TEST(UtilsTest, TokenizeResult) {
     }
 
     EXPECT_EQ('\"', '"');
+}
+
+class PathUtilsTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        // 创建临时测试目录结构
+        fs::create_directories(base_dir / "a/b/c");
+        fs::create_directories(base_dir / "x/y");
+        std::ofstream(base_dir / "a/file.txt").put('x');
+        
+        // 创建符号链接（Unix 示例）
+        if (!fs::exists(base_dir / "a/link")) {
+            fs::create_symlink("../x", base_dir / "a/link");
+        }
+    }
+
+    void TearDown() override {
+        fs::remove_all(base_dir);  // 清理测试目录
+    }
+
+    const fs::path base_dir = fs::temp_directory_path() / "test_path_utils";
+};
+
+// 测试正常子路径
+TEST_F(PathUtilsTest, DirectSubpath) {
+    EXPECT_TRUE(Utils::is_subpath(base_dir, base_dir / "a/b/c"));
+    EXPECT_TRUE(Utils::is_subpath(base_dir / "a", base_dir / "a/file.txt"));
+}
+
+// 测试相对路径和父级引用
+TEST_F(PathUtilsTest, RelativePaths) {
+    EXPECT_TRUE(Utils::is_subpath(base_dir / "a", base_dir / "./a/b"));
+    EXPECT_FALSE(Utils::is_subpath(base_dir / "a/b", base_dir / "a/../x"));
+}
+
+// 测试不存在的路径
+TEST_F(PathUtilsTest, NonExistentPaths) {
+    EXPECT_FALSE(Utils::is_subpath(base_dir, base_dir / "ghost"));
+    EXPECT_FALSE(Utils::is_subpath(base_dir / "ghost", base_dir / "a"));
+}
+
+// 测试完全无关的路径
+TEST_F(PathUtilsTest, UnrelatedPaths) {
+    EXPECT_FALSE(Utils::is_subpath("/usr", "/tmp"));
+    EXPECT_FALSE(Utils::is_subpath(base_dir, "/home"));
+}
+
+// 测试自身是否是自己的子路径
+TEST_F(PathUtilsTest, SelfIsSubpath) {
+    EXPECT_TRUE(Utils::is_subpath(base_dir, base_dir));  // 规范化后相同
 }

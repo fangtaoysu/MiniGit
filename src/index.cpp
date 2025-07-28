@@ -14,17 +14,18 @@ Index::Index(const std::string& project_path)
 }
 
 /**将 .mgit/index 文件读到json中 */
-json Index::get_index() const {
+json Index::get_index(const std::string& project_path) {
+    const std::string index_path = project_path + "/.mgit/index";
     json index = {};
-    if (!fs::exists(index_path_)) {
+    if (!fs::exists(index_path)) {
         return index;
     }
-    std::ifstream(index_path_) >> index;
+    std::ifstream(index_path) >> index;
     return index;
 }
 
 void Index::reset_index_entries() {
-    json index = get_index();
+    json index = Index::get_index(project_path_);
     index["entries"]["counts"] = 0;
     index["entries"]["create_files"].clear();
     for (auto& item : index) {
@@ -48,7 +49,7 @@ void Index::write_to_index(json file_info) const {
 void Index::add(const std::vector<fs::path>* files) const {
     ObjectDB db(project_path_);
     // 1. 读原有的index文件，如果index为空，那么构造一个空字典
-    json index_info = get_index();
+    json index_info = Index::get_index(project_path_);
 
     // 2. 得到需要add的文件
     std::vector<fs::path> all_files;
@@ -117,7 +118,7 @@ void Index::add(const std::vector<fs::path>* files) const {
  * 新建文件（untrack） 未add的（not staged） 未commit的（to be committed)
  */
 void Index::status() {
-    json index = get_index();
+    json index = Index::get_index(project_path_);
     std::vector<fs::path> untrack, not_staged, to_be_commited;
     std::vector<fs::path> all_files = FileSystem::get_all_files(project_path_);
     for (auto& file : all_files) {

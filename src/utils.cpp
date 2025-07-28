@@ -1,4 +1,5 @@
 #include "../include/utils.h"
+#include <filesystem>
 #include <openssl/sha.h> // sha-1 哈希
 #include <sstream>
 #include <iomanip>
@@ -92,4 +93,28 @@ fs::path Utils::generate_obj_path(const std::string& project_path, const std::st
         throw std::invalid_argument("hash must 40 characters long, hash:" + hash);
     }
     return obj_dir / hash.substr(2);
+}
+
+
+bool Utils::is_subpath(const fs::path& parent, const fs::path& child) {
+    try {
+        auto norm_parent = fs::canonical(parent);
+        auto norm_child = fs::canonical(child);
+
+        // 额外检查：确保 child 的路径长度 >= parent
+        if (norm_child.string().length() < norm_parent.string().length()) {
+            return false;
+        }
+        
+        // mismatch找到第一个不匹配的元素，如果全部匹配，则返回end()
+        auto [mismatch, _] = std::mismatch(
+            norm_parent.begin(), norm_parent.end(),
+            norm_child.begin()
+        );
+
+        return mismatch == norm_parent.end();
+    } catch (const fs::filesystem_error&) {
+        return false;
+    }
+
 }

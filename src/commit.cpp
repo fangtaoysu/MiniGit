@@ -40,8 +40,7 @@ const std::string Commit::read_commit_hash(const std::string& project_path) {
 
 /** 将本条commit对象保存在`.mgit/logs/HEAD`中 */
 void Commit::run(const std::string& msg) {
-    Index index_object(project_path_);
-    json index = index_object.get_index();
+    json index = Index::get_index(project_path_);
 
     // 打上当前的时间戳
     current_timestamp_ = Utils::get_current_timestamp();
@@ -68,6 +67,7 @@ void Commit::run(const std::string& msg) {
     // 将完整的commit对象保存到 .gmit/objects 中
     save_to_objects(father_ref, tree_objects, msg);
     save_to_HEAD(father_ref, msg);
+    Index index_object(project_path_);
     index_object.reset_index_entries();
 }
 

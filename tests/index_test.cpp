@@ -8,8 +8,7 @@ using json = nlohmann::json;
 
 TEST(IndexTest, ReadIndex) {
     const std::string project_path("/data/fangtao/MiniGit/tmp");
-    Index index_obejct(project_path);
-    json result = index_obejct.get_index();
+    json result = Index::get_index(project_path);
     json true_result = {};
     if (fs::exists(project_path + "/.mgit/index")) {
         std::ifstream(project_path + "/.mgit/index") >> true_result;

@@ -8,7 +8,7 @@ class CmdAdd : public GitCommand {
         void execute(const ParsedCommand& cmd, Repository& repo) override;
 
     private:
-        void checkout_cmd(const ParsedCommand& cmd);
+        void checkout_cmd(const ParsedCommand& cmd, const std::string& project_path);
         void mgit_add(const std::vector<std::string>& paths, const std::string& project_path);
 };
 

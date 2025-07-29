@@ -4,11 +4,6 @@
 
 
 
-FileSystem::FileSystem(const std::string& file_path)
-    : file_path_(file_path) {
-    
-}
-
 std::stringstream FileSystem::read_file(const fs::path& file_path) {
     // 确保静态变量只初始化一次（线程安全）
     std::stringstream ss;
@@ -116,23 +111,9 @@ bool FileSystem::append_file_content(const std::string& file_path, const std::st
     }
 }
 
-/**检查path是否以base开头 */
-bool FileSystem::is_inside_excluded(const fs::path& path, const fs::path& exclude_dir) {
-    const std::string path_str = fs::absolute(path).lexically_normal().string();
-    const std::string excl_str = fs::absolute(exclude_dir).lexically_normal().string();
-
-    // 确保排除目录路径以分隔符结尾
-    const char sep = fs::path::preferred_separator;
-    const std::string excl_with_sep = excl_str.back() == sep ? excl_str : excl_str + sep;
-
-    return path_str.find(excl_with_sep) == 0;
-}
-
 /**获取 .mgit目录下所有层级的文件路径 */
 std::vector<fs::path> FileSystem::get_all_files(const std::string& mgit_path) {
     std::vector<fs::path> files;
-    // 建一个临时的build
-    fs::path build_abs = fs::absolute("../build");
     
     try {
         fs::path mgit_abs = fs::absolute(fs::path(mgit_path) / ".mgit").lexically_normal();
@@ -145,9 +126,6 @@ std::vector<fs::path> FileSystem::get_all_files(const std::string& mgit_path) {
         for (const auto& entry : fs::recursive_directory_iterator(parent_dir)) {        
             fs::path abs_path = fs::absolute(entry.path()).lexically_normal();
             
-            if (is_inside_excluded(abs_path, mgit_abs) || is_inside_excluded(abs_path, build_abs) || fs::is_directory(abs_path)) {
-                continue;
-            }
             files.push_back(abs_path);
         }
     } catch (const fs::filesystem_error& e) {

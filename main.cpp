@@ -62,9 +62,9 @@ void origin_cmd_test() {
     const std::string project_path("/data/fangtao/MiniGit/tmp");
     Repository repo;
     repo.init_repository();
-    Index index_object(project_path);
+    Index index_object;
     index_object.add(nullptr);
-    Commit commit_object(project_path);
+    Commit commit_object;
     commit_object.run("mgit init");
     commit_object.run("feat:new add\n -look at me \n- 是不是两行");
 }

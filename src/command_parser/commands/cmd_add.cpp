@@ -11,7 +11,7 @@ void CmdAdd::execute(const ParsedCommand& cmd) {
 }
 
 void CmdAdd::mgit_add(const std::vector<std::string>& paths, const std::string& project_path) {
-    Index index_obejct(project_path);
+    Index index_obejct;
     if (paths.size() == 1 && paths[0] == ".") {
         index_obejct.add(nullptr);
     } else { // 遍历参数，add files的绝对地址

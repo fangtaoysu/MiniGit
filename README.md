@@ -168,5 +168,4 @@ find .git/objects -type f | wc -l # 查看文件数
 
 # TODO
 
-2. 完成.mgitignore
 3. 完成push功能

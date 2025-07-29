@@ -9,12 +9,11 @@
 
 
 namespace fs = std::filesystem;
-Index::Index(const std::string& project_path)
- : project_path_(project_path), index_path_(project_path + "/.mgit/index") {
-}
+
 
 /**将 .mgit/index 文件读到json中 */
-json Index::get_index(const std::string& project_path) {
+json Index::get_index() {
+    const std::string project_path = Utils::get_project_path();
     const std::string index_path = project_path + "/.mgit/index";
     json index = {};
     if (!fs::exists(index_path)) {
@@ -25,7 +24,7 @@ json Index::get_index(const std::string& project_path) {
 }
 
 void Index::reset_index_entries() {
-    json index = Index::get_index(project_path_);
+    json index = Index::get_index();
     index["entries"]["counts"] = 0;
     index["entries"]["create_files"].clear();
     for (auto& item : index) {
@@ -47,9 +46,9 @@ void Index::write_to_index(json file_info) const {
 }
 
 void Index::add(const std::vector<fs::path>* files) const {
-    ObjectDB db(project_path_);
+    ObjectDB db;
     // 1. 读原有的index文件，如果index为空，那么构造一个空字典
-    json index_info = Index::get_index(project_path_);
+    json index_info = Index::get_index();
 
     // 2. 得到需要add的文件
     std::vector<fs::path> all_files;
@@ -120,7 +119,7 @@ void Index::add(const std::vector<fs::path>* files) const {
  * 新建文件（untrack） 未add的（not staged） 未commit的（to be committed)
  */
 void Index::status() {
-    json index = Index::get_index(project_path_);
+    json index = Index::get_index();
     std::vector<fs::path> untrack, not_staged, to_be_commited;
     std::vector<fs::path> all_files = FileSystem::get_all_files(project_path_);
     for (auto& file : all_files) {

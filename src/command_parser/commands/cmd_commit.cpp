@@ -7,7 +7,7 @@
 void CmdCommit::execute(const ParsedCommand& cmd) {
     checkout_cmd(cmd);
     std::string project_path = Utils::get_project_path();
-    Commit commit_obejct(project_path);
+    Commit commit_obejct;
     commit_obejct.run(cmd.plain_args[0]);
 }
 

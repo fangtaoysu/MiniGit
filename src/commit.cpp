@@ -1,23 +1,11 @@
-
-
 #include "../include/commit.h"
-#include "../include/file_system.h"
-#include "../include/utils.h"
-#include "../include/object_db.h"
-#include "../include/config.h"
-#include "index.h"
 #include <fstream>
 #include <iostream>
 
 
 
-/** 创建一个新的提交对象 */
-Commit::Commit (const std::string& project_path)
-    : project_path_(project_path), current_ref_("") {
-}
-
-
-const std::string Commit::read_commit_hash(const std::string& project_path) {
+const std::string Commit::read_commit_hash() {
+    const std::string project_path = Utils::get_project_path();
     fs::path HEAD_path = fs::path(project_path) / ".mgit" / "logs" / "HEAD";
     const std::string father_ref(40, '0');
     if (!fs::exists(HEAD_path)) {
@@ -40,7 +28,7 @@ const std::string Commit::read_commit_hash(const std::string& project_path) {
 
 /** 将本条commit对象保存在`.mgit/logs/HEAD`中 */
 void Commit::run(const std::string& msg) {
-    json index = Index::get_index(project_path_);
+    json index = Index::get_index();
 
     // 打上当前的时间戳
     current_timestamp_ = Utils::get_current_timestamp();
@@ -58,7 +46,7 @@ void Commit::run(const std::string& msg) {
         }
     }
     // 上一个commit哈希作为本次commit对象的父节点
-    const std::string father_ref = Commit::read_commit_hash(project_path_);
+    const std::string father_ref = Commit::read_commit_hash();
 
     // 生成本条commit的哈希
     const std::string hash_source = msg + current_timestamp_;
@@ -67,7 +55,7 @@ void Commit::run(const std::string& msg) {
     // 将完整的commit对象保存到 .gmit/objects 中
     save_to_objects(father_ref, tree_objects, msg);
     save_to_HEAD(father_ref, msg);
-    Index index_object(project_path_);
+    Index index_object;
     index_object.reset_index_entries();
 }
 
@@ -92,7 +80,7 @@ void Commit::save_to_objects(const std::string& father_ref, const std::vector<st
 
     // 构造author
     Config config(project_path_);
-    ObjectDB db(project_path_);
+    ObjectDB db;
     std::string author(
         config.user_.name + " <" + config.user_.email + "> " + current_timestamp_
     );
@@ -131,13 +119,14 @@ void Commit::save_to_HEAD(const std::string& father_ref, const std::string& msg)
     FileSystem::append_file_content(HEAD_path, ss.str());
 }
 
-std::vector<std::string> Commit::read_tree_object(const std::string& project_path) {
+std::vector<std::string> Commit::read_tree_object() {
+    const std::string project_path = Utils::get_project_path();
     std::vector<std::string> tree_objects;
     std::string tree_hash;
     std::string line;
     
     // 读HEAD文件解析出commit哈希
-    const std::string commit_hash = read_commit_hash(project_path);
+    const std::string commit_hash = read_commit_hash();
     
     // 读commit对象解析出tree对象
     fs::path commit_obj_path = Utils::generate_obj_path(project_path, commit_hash);

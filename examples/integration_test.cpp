@@ -26,12 +26,12 @@ int main() {
     std::cout << "初始化完成" << std::endl;
     // 进行集成测试
     // add 测试
-    Index index_obejct(project_path);
+    Index index_obejct;
     index_obejct.add(nullptr);
     std::cout << "git add 完成，请检查index文件和objects文件夹" << std::endl;
     // commit 测试
     fs::remove(fs::path(project_path) / ".mgit/logs/HEAD");
-    Commit commit_object(project_path);
+    Commit commit_object;
     const std::string msg1("my mini git init, happy");
     const std::string msg2("feat: complish add and commit");
     commit_object.run(msg1);

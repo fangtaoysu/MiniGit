@@ -5,7 +5,7 @@
 #include <vector>
 #include <filesystem>
 #include "../thrid_party/nlohmann//json.hpp"
-#include "../../utils.h"
+#include "utils.h"
 
 
 template<typename> constexpr bool always_false = false;
@@ -14,13 +14,13 @@ using json = nlohmann::json;
 namespace fs = std::filesystem;
 class ObjectDB {
     public:
-        ObjectDB(const std::string& project_path);
+        ObjectDB()=default;
         // std::vector<std::string> read(const std::string& hash);
         template <typename content_type>
         const fs::path write(const std::string& hash, const content_type& write_contents);
 
     private:
-        const std::string& project_path_;
+        const std::string project_path_ = Utils::get_project_path();
         bool write_path(const fs::path& src_path, const fs::path& des_path);
         bool write_json(const json& write_contents, const fs::path& des_path);
         bool write_lines(const std::vector<std::string>& write_contents, const fs::path& des_path);

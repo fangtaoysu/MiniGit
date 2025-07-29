@@ -14,7 +14,7 @@ class Remote {
     public:
         Remote()=default;
         ~Remote()=default;
-        void push(const std::string& commit_object, const std::vector<std::string>& tree_objects, const std::unordered_map<std::string, std::string>& tree_and_hash_map);
+        void push(const std::string& commit_hash, const std::vector<std::string>& tree_objects, const std::unordered_map<std::string, std::string>& tree_and_hash_map);
         void create_database(const std::string& project_path);
 
 };

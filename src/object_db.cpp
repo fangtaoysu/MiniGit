@@ -3,15 +3,6 @@
 #include <iostream>
 
 
-ObjectDB::ObjectDB(const std::string& project_path)
-    : project_path_(project_path) {
-
-}
-
-// std::vector<std::string> ObjectDB::read(const std::string& hash) {
-
-// }
-
 
 bool ObjectDB::write_path(const fs::path& src_path, const fs::path& des_path) {
     try {

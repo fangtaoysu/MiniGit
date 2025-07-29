@@ -4,8 +4,9 @@
 
 
 /** 把commit对象、tree对象和tree对象对应的文件等信息写入表中 */
-void Remote::push(const std::string& commit_object, const std::vector<std::string>& tree_objects, const std::unordered_map<std::string, std::string>& tree_and_hash_map) {
-    // 
+void Remote::push(const std::string& commit_hash, const std::vector<std::string>& tree_objects, const std::unordered_map<std::string, std::string>& tree_and_hash_map) {
+    // 获取commit对象，并保存在commits表中
+    
 }
 
 /** 创建该项目对应的数据库及需要的表 */
@@ -50,5 +51,4 @@ void Remote::create_database(const std::string& project_path) {
             FOREIGN KEY (file_hash) REFERENCES file_objects(file_hash)
         )
     )");
-
 }

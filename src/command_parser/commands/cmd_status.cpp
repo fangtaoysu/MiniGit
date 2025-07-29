@@ -5,6 +5,6 @@
 
 void CmdStatus::execute(const ParsedCommand& cmd) {
     std::string project_path = Utils::get_project_path();
-    Index index_object(project_path);
+    Index index_object;
     index_object.status();
 }

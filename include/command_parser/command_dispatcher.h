@@ -8,12 +8,11 @@
 #include <mutex>
 class CommandDispatcher {
     public:
-        CommandDispatcher(Repository& repo);
+        CommandDispatcher()=default;
         void register_command(const std::string& name, std::unique_ptr<GitCommand> cmd);
         void execute(const ParsedCommand& cmd);
 
     private:
-        Repository& repo_;
         std::unordered_map<std::string, std::unique_ptr<GitCommand>> commands_;
 };
 

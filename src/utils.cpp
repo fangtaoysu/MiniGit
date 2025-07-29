@@ -1,5 +1,5 @@
 #include "../include/utils.h"
-#include <filesystem>
+#include <fstream>
 #include <openssl/sha.h> // sha-1 哈希
 #include <sstream>
 #include <iomanip>
@@ -116,5 +116,21 @@ bool Utils::is_subpath(const fs::path& parent, const fs::path& child) {
     } catch (const fs::filesystem_error&) {
         return false;
     }
+}
 
+
+/** 获取项目路径 */
+std::string Utils::get_project_path() {
+    // 读json文件
+    fs::path config_path = fs::current_path() / ".mgit" / "config";
+    std::ifstream config_file(config_path);
+    json config;
+    config_file >> config;
+
+    // 读 project path
+    std::string project_path = "";
+    if (config.contains("core") && config["core"].contains("worktree")) {
+        project_path = config["core"]["worktree"];
+    }
+    return project_path;
 }

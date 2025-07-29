@@ -5,20 +5,30 @@ project(MiniGit
 )
 
 # 强制使用系统GTest（避开conda环境）
-set(GTest_DIR "/usr/lib/x86_64-linux-gnu/cmake/GTest")  # 关键修改点
+set(GTest_DIR "/usr/lib/x86_64-linux-gnu/cmake/GTest")
 # 关键配置：强制生成调试符号，禁用优化
-set(CMAKE_BUILD_TYPE Debug)          # 启用调试模式
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")  # -g 生成调试符号，-O0 禁用优化
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_POSITION_INDEPENDENT_CODE OFF)  # 除非明确需要PIE
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+
+# 设置输出目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # 查找依赖
 find_package(OpenSSL REQUIRED)
-find_package(GTest REQUIRED)  # 必须放在OpenSSL之后
+find_package(GTest REQUIRED)
+find_package(SQLite3 REQUIRED)
+
+# 添加子目录
+add_subdirectory(database/src)
+add_subdirectory(database/tests)
 
 # ========== 构建主库 mini_git_lib ==========
 add_library(mini_git_lib
@@ -31,6 +41,7 @@ add_library(mini_git_lib
     src/config.cpp
     src/object_db.cpp
     src/thread_pool.cpp
+    src/remote.cpp
     src/command_parser/parser.cpp
     src/command_parser/command_dispatcher.cpp
     src/command_parser/commands/cmd_init.cpp
@@ -48,103 +59,44 @@ target_include_directories(mini_git_lib
     include/command_parser/commands
     ${OPENSSL_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party
+    ${CMAKE_CURRENT_SOURCE_DIR}/database/include
 )
 
 target_link_libraries(mini_git_lib
     PRIVATE
     OpenSSL::Crypto
+    git_db
 )
+
 # ========== 项目入口 mini_git ==========
 add_executable(main
     main.cpp
 )
 
 target_link_libraries(main
-    PRIVATE mini_git_lib
-)
-
-set_target_properties(main PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    PRIVATE mini_git_lib git_db
 )
 
 # ========== 构建测试文件 ==========
 # 1. commit_test
-add_executable(test_commit
-    tests/commit_test.cpp
-)
-
-target_link_libraries(test_commit
-    PRIVATE
-    mini_git_lib
-    GTest::GTest
-    GTest::Main  # 必须包含Main库
-)
-
-set_target_properties(test_commit PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)
+add_executable(test_commit tests/commit_test.cpp)
+target_link_libraries(test_commit PRIVATE mini_git_lib GTest::GTest GTest::Main)
 
 # 2. file_system_test
-add_executable(test_file_system
-    tests/file_system_test.cpp
-)
-
-target_link_libraries(test_file_system
-    PRIVATE
-    mini_git_lib
-    GTest::GTest
-    GTest::Main
-)
-
-set_target_properties(test_file_system PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)
+add_executable(test_file_system tests/file_system_test.cpp)
+target_link_libraries(test_file_system PRIVATE mini_git_lib GTest::GTest GTest::Main)
         
 # 3. index_test
-add_executable(test_index
-    tests/index_test.cpp
-)
+add_executable(test_index tests/index_test.cpp)
+target_link_libraries(test_index PRIVATE mini_git_lib GTest::GTest GTest::Main)
 
-target_link_libraries(test_index
-    PRIVATE
-    mini_git_lib
-    GTest::GTest
-    GTest::Main
-)
-
-set_target_properties(test_index PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)
-
-# 4.utils_test
-add_executable(test_utils
-    tests/utils_test.cpp
-)
-
-target_link_libraries(test_utils
-    PRIVATE    
-    mini_git_lib
-    GTest::GTest
-    GTest::Main
-)
-
-set_target_properties(test_utils PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)
+# 4. utils_test
+add_executable(test_utils tests/utils_test.cpp)
+target_link_libraries(test_utils PRIVATE mini_git_lib GTest::GTest GTest::Main)
 
 # 集成测试
-add_executable(integration_test
-    examples/integration_test.cpp
-)
-
-target_link_libraries(integration_test
-    PRIVATE
-    mini_git_lib
-)
-
-set_target_properties(integration_test PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)
+add_executable(integration_test examples/integration_test.cpp)
+target_link_libraries(integration_test PRIVATE mini_git_lib)
 
 # 测试配置
 enable_testing()

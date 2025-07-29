@@ -1,8 +1,10 @@
 #include "../../include/command_parser/commands/cmd_status.h"
+#include <string>
 
 
 
-void CmdStatus::execute(const ParsedCommand& cmd, Repository& repo) {
-    Index index_object(repo.get_project_path());
+void CmdStatus::execute(const ParsedCommand& cmd) {
+    std::string project_path = Utils::get_project_path();
+    Index index_object(project_path);
     index_object.status();
 }

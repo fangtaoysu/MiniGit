@@ -4,9 +4,9 @@
 
 
 /** 实现 git init */
-void CmdInit::execute(const ParsedCommand& cmd, Repository& repo) {
+void CmdInit::execute(const ParsedCommand& cmd) {
     checkout_cmd(cmd);
-    // std::cout << "init 进来了\n"
+    Repository repo;
     repo.init_repository();
 }
 

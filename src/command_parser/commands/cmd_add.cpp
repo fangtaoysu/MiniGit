@@ -1,13 +1,13 @@
 #include "../../../include/command_parser/commands/cmd_add.h"
 #include "../../../include/index.h"
-#include "utils.h"
 #include <iostream>
 
 
 /** 实现 git add */
-void CmdAdd::execute(const ParsedCommand& cmd, Repository& repo) {
-    checkout_cmd(cmd, repo.get_project_path());
-    mgit_add(cmd.plain_args, repo.get_project_path());
+void CmdAdd::execute(const ParsedCommand& cmd) {
+    std::string project_path = Utils::get_project_path();
+    checkout_cmd(cmd, project_path);
+    mgit_add(cmd.plain_args, project_path);
 }
 
 void CmdAdd::mgit_add(const std::vector<std::string>& paths, const std::string& project_path) {
@@ -19,7 +19,6 @@ void CmdAdd::mgit_add(const std::vector<std::string>& paths, const std::string& 
         for (auto & file : paths) {
             // 此处需要判断，如果参数是目录，那么需要递归拿到这个目录下的所有文件
             const std::string file_path(project_path + "/" + file);
-            std::cout << file_path << std::endl;
             if (fs::is_directory(file_path)) {
                 for (const auto & entry : fs::recursive_directory_iterator(file_path)) {
                     if (!fs::is_directory(entry)) {

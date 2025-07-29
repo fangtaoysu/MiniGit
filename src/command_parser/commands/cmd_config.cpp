@@ -3,8 +3,9 @@
 
 
 
-void CmdConfig::execute(const ParsedCommand& cmd, Repository& repo) {
+void CmdConfig::execute(const ParsedCommand& cmd) {
     checkout_cmd(cmd);
+    Repository repo;
     repo.config(cmd.key_value_args);
 }
 

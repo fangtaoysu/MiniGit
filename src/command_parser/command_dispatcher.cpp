@@ -3,10 +3,6 @@
 
 
 
-CommandDispatcher::CommandDispatcher(Repository& repo)
-    : repo_(repo) {
-
-}
 
 /**在main中注册command，让代码更具可读性 */
 void CommandDispatcher::register_command(const std::string& name, std::unique_ptr<GitCommand> cmd) {
@@ -19,7 +15,7 @@ void CommandDispatcher::execute(const ParsedCommand& cmd) {
     // 对比分发器中的key和用户输入解析后的name是否一致
     auto it = commands_.find(cmd.name);
     if (it != commands_.end()) {
-        it->second->execute(cmd, repo_);
+        it->second->execute(cmd);
     } else {
         throw std::runtime_error("Unknown command: " + cmd.name);
     }

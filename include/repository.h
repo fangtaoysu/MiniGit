@@ -4,6 +4,7 @@
 #define __REPOSITORY_H__
 #include <unordered_map>
 #include <string>
+#include "remote.h"
 
 
 class Repository {

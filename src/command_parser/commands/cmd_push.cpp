@@ -1,15 +1,19 @@
 #include "../../../include/command_parser/commands/cmd_push.h"
 #include <iostream>
+#include <sys/stat.h>
 
 
 
-void CmdPush::execute(const ParsedCommand& cmd, Repository& repo) {
+void CmdPush::execute(const ParsedCommand& cmd) {
+    std::string project_path = Utils::get_project_path();
     // 获取commit对象，tree对象及blob对象
-    const std::string commit_hash = Commit::read_commit_hash(repo.get_project_path());
-    std::vector<std::string> tree_objects = Commit::read_tree_object(repo.get_project_path());
-    std::unordered_map<std::string, std::string> tree_and_hash_map = get_tree_and_hash_map(tree_objects, repo.get_project_path());
+    const std::string commit_hash = Commit::read_commit_hash(project_path);
+    std::vector<std::string> tree_objects = Commit::read_tree_object(project_path);
+    std::unordered_map<std::string, std::string> tree_and_hash_map = get_tree_and_hash_map(tree_objects, project_path);
+    
     // 将tree对象中包含的所有文件全部上传至服务器
-
+    Remote remote_object;
+    remote_object.push(commit_hash, tree_objects, tree_and_hash_map);
 }
 
 

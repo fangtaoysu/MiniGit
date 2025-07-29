@@ -27,9 +27,8 @@ std::string control_input() {
 
 void run() {
     std::string cmd;
-    Repository repo;
     std::unique_ptr<GitCommand> git_cmd;
-    CommandDispatcher dispatcher(repo);
+    CommandDispatcher dispatcher;
     // 由状态机完成命令解析的部分
     StateMachineParser parser;
     //  creates a std::unique_ptr object

@@ -26,7 +26,7 @@ void Repository::init_repository() {
     Config config_obejct(project_path_);
     config_obejct.save_config();
     Remote remote_object;
-    remote_object.create_database(project_path_);
+    remote_object.create_database();
 }
 
 void Repository::config(const std::unordered_map<std::string, std::string>& info) {

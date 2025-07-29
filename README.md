@@ -165,7 +165,10 @@ find .git/objects -type f | wc -l # 查看文件数
 长度前缀序列化：将下一个字符串的长度和空格存入其中（序列化），读取的时候先读下一个字符的长度，就能根据长度读取指定的字符串；
 本项目采用了json序列化的方式 
 
-
 # TODO
 
-3. 完成push功能
+后续修复一下
+The following tests FAILED:
+    2 - FileSystemTest (Failed)
+    3 - IndexTest (Failed)
+    5 - ObjectDBTest (Failed)

@@ -59,7 +59,6 @@ void Index::add(const std::vector<fs::path>* files) const {
     size_t count = 0;
     std::vector<std::string> create_files;
     ThreadPool pool(std::thread::hardware_concurrency());
-    std::cout << "thread numbers: " << std::thread::hardware_concurrency() << std::endl;
     std::mutex mtx;
     
     const std::vector<fs::path> filitered_files = Utils::filter_files(files);
@@ -122,7 +121,8 @@ void Index::status() {
     json index = Index::get_index();
     std::vector<fs::path> untrack, not_staged, to_be_commited;
     std::vector<fs::path> all_files = FileSystem::get_all_files(project_path_);
-    for (auto& file : all_files) {
+    const std::vector<fs::path> filitered_files = Utils::filter_files(&all_files);
+    for (auto& file : filitered_files) {
         int64_t now_modified = FileSystem::get_file_timestamp(file);
         // 对file进行分类
         fs::path relative_path = fs::relative(file, project_path_);

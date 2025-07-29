@@ -19,6 +19,8 @@ struct Utils {
     static bool is_subpath(const fs::path& parent, const fs::path& child);
     static std::string get_project_path();
     static std::vector<fs::path> filter_files(const std::vector<fs::path>* files);
+    static std::string get_current_time();
+
 };
 
 #endif

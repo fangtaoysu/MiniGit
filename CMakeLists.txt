@@ -94,6 +94,10 @@ target_link_libraries(test_index PRIVATE mini_git_lib GTest::GTest GTest::Main)
 add_executable(test_utils tests/utils_test.cpp)
 target_link_libraries(test_utils PRIVATE mini_git_lib GTest::GTest GTest::Main)
 
+# 5. object_db_test
+add_executable(test_object_db tests/object_db_test.cpp)
+target_link_libraries(test_object_db PRIVATE mini_git_lib GTest::GTest GTest::Main)
+
 # 集成测试
 add_executable(integration_test examples/integration_test.cpp)
 target_link_libraries(integration_test PRIVATE mini_git_lib)
@@ -104,3 +108,4 @@ add_test(NAME CommitTest COMMAND test_commit)
 add_test(NAME FileSystemTest COMMAND test_file_system)
 add_test(NAME IndexTest COMMAND test_index)
 add_test(NAME UtilsTest COMMAND test_utils)
+add_test(NAME ObjectDBTest COMMAND test_object_db)

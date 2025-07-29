@@ -6,27 +6,37 @@
 
 void CmdPush::execute(const ParsedCommand& cmd) {
     std::string project_path = Utils::get_project_path();
-    // 获取commit对象，tree对象及blob对象
-    const std::string commit_hash = Commit::read_commit_hash();
-    std::vector<std::string> tree_objects = Commit::read_tree_object();
-    std::unordered_map<std::string, std::string> tree_and_hash_map = get_tree_and_hash_map(tree_objects, project_path);
-    
-    // 将tree对象中包含的所有文件全部上传至服务器
     Remote remote_object;
-    remote_object.push(commit_hash, tree_objects, tree_and_hash_map);
+    
+    // 构造commits需要的对象
+    const std::string commit_hash = Commit::get_commit_hash();
+    std::string tree_hash = Commit::get_tree_hash();
+    ObjectDB object_db;
+    json commit_object = object_db.read<json>(commit_hash);
+    remote_object.push_commits(commit_hash, tree_hash, commit_object);
+
+    // 构造files需要的对象
+    std::vector<std::string> tree_objects = Commit::read_tree_object();
+    std::unordered_map<std::string, json> file_tree_and_object_map = get_file_tree_and_object_map(tree_objects);
+    remote_object.push_files(file_tree_and_object_map);
+
+    // 构造commit_file_map需要的对象
+    remote_object.push_commit_file_map(tree_objects, tree_hash);
 }
 
 
 /** 将路径与index中对应的哈希构造为map */
-std::unordered_map<std::string, std::string> CmdPush::get_tree_and_hash_map(const std::vector<std::string>& tree_objects, const std::string& project_path) {
+std::unordered_map<std::string, json> CmdPush::get_file_tree_and_object_map(const std::vector<std::string>& tree_objects) {
+    const std::string project_path = Utils::get_project_path();
     json index = Index::get_index();
-    std::unordered_map<std::string, std::string> res;
+    std::unordered_map<std::string, json> res;
     for (auto& tree : tree_objects) {
-        if (index.contains(tree) && index[tree].contains("hash")) {
-            res[tree] = index[tree]["hash"];
+        std::cout << tree << std:: endl;
+        if (index.contains(tree)) {
+            res[tree] = index[tree];
         } else {
-            std::cerr << "缺失的哈希：" << tree << std::endl;
+            std::cerr << "缺失的文件信息：" << tree << std::endl;
         }
     }
     return res;
-}
+} 

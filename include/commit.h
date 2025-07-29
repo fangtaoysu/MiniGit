@@ -17,7 +17,8 @@ class Commit {
         ~Commit() {}
         void run(const std::string& msg);
         static std::vector<std::string> read_tree_object();
-        static const std::string read_commit_hash();
+        static const std::string get_commit_hash();
+        static std::string get_tree_hash();
         
     private:
         bool is_index_changed(const json& entries) const;

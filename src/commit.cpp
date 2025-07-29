@@ -4,7 +4,7 @@
 
 
 
-const std::string Commit::read_commit_hash() {
+const std::string Commit::get_commit_hash() {
     const std::string project_path = Utils::get_project_path();
     fs::path HEAD_path = fs::path(project_path) / ".mgit" / "logs" / "HEAD";
     const std::string father_ref(40, '0');
@@ -46,7 +46,7 @@ void Commit::run(const std::string& msg) {
         }
     }
     // 上一个commit哈希作为本次commit对象的父节点
-    const std::string father_ref = Commit::read_commit_hash();
+    const std::string father_ref = Commit::get_commit_hash();
 
     // 生成本条commit的哈希
     const std::string hash_source = msg + current_timestamp_;
@@ -81,14 +81,13 @@ void Commit::save_to_objects(const std::string& father_ref, const std::vector<st
     // 构造author
     Config config(project_path_);
     ObjectDB db;
-    std::string author(
-        config.user_.name + " <" + config.user_.email + "> " + current_timestamp_
-    );
         
     json commit_object = {
         {"parent", father_ref},
-        {"author", author},
-        {"commit", msg},
+        {"author", config.user_.name},
+        {"email", config.user_.email},
+        {"message", msg},
+        {"time", current_timestamp_},
         {"tree", tree_hash}
     };
     db.write(current_ref_, commit_object);
@@ -120,22 +119,10 @@ void Commit::save_to_HEAD(const std::string& father_ref, const std::string& msg)
 }
 
 std::vector<std::string> Commit::read_tree_object() {
-    const std::string project_path = Utils::get_project_path();
     std::vector<std::string> tree_objects;
-    std::string tree_hash;
     std::string line;
-    
-    // 读HEAD文件解析出commit哈希
-    const std::string commit_hash = read_commit_hash();
-    
-    // 读commit对象解析出tree对象
-    fs::path commit_obj_path = Utils::generate_obj_path(project_path, commit_hash);
-    std::ifstream commit_file(commit_obj_path);
-    json commit_obj = json::parse(commit_file);
-    if (!commit_obj.contains("tree")) {
-        return tree_objects;
-    }
-    tree_hash = commit_obj["tree"];
+    const std::string project_path = Utils::get_project_path();
+    std::string tree_hash = Commit::get_tree_hash();
     fs::path tree_obj_path = Utils::generate_obj_path(project_path, tree_hash);
 
     std::ifstream tree_file(tree_obj_path);
@@ -144,4 +131,22 @@ std::vector<std::string> Commit::read_tree_object() {
     }
 
     return tree_objects;  
+}
+
+std::string Commit::get_tree_hash() {
+    const std::string project_path = Utils::get_project_path();
+    std::string tree_hash;
+    
+    // 读HEAD文件解析出commit哈希
+    const std::string commit_hash = get_commit_hash();
+    
+    // 读commit对象解析出tree对象
+    fs::path commit_obj_path = Utils::generate_obj_path(project_path, commit_hash);
+    std::ifstream commit_file(commit_obj_path);
+    json commit_obj = json::parse(commit_file);
+    if (!commit_obj.contains("tree")) {
+        return tree_hash;
+    }
+    tree_hash = commit_obj["tree"];
+    return tree_hash;
 }

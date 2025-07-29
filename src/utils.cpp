@@ -6,6 +6,8 @@
 #include <chrono>
 #include <stdexcept>
 #include <regex>
+#include <iostream>
+#include <ctime>
 
 
 
@@ -207,4 +209,13 @@ std::vector<fs::path> Utils::filter_files(const std::vector<fs::path>* files) {
     }
 
     return res;
+}
+
+std::string Utils::get_current_time() {
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+    return ss.str();
 }

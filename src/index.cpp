@@ -63,7 +63,9 @@ void Index::add(const std::vector<fs::path>* files) const {
     std::cout << "thread numbers: " << std::thread::hardware_concurrency() << std::endl;
     std::mutex mtx;
     
-    for (auto & file : *files) {
+    const std::vector<fs::path> filitered_files = Utils::filter_files(files);
+    for (auto & file : filitered_files) {
+        // 如果当前文件位于 .mgitignore中，跳过
         pool.enqueue([&, file] {
             std::string hash_value;
             bool is_commit = true;

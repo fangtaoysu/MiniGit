@@ -2,3 +2,5 @@ build/*
 .vscode/
 tmp/
 .mgit/*
+.mgitignore
+MiniGit.db

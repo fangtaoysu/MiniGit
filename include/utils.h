@@ -18,6 +18,7 @@ struct Utils {
     static fs::path generate_obj_path(const std::string& project_path, const std::string& hash);
     static bool is_subpath(const fs::path& parent, const fs::path& child);
     static std::string get_project_path();
+    static std::vector<fs::path> filter_files(const std::vector<fs::path>* files);
 };
 
 #endif

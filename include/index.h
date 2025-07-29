@@ -2,6 +2,7 @@
 #ifndef __INDEX_H__
 #define __INDEX_H__
 #include <string>
+#include "utils.h"
 #include "../thrid_party/nlohmann/json.hpp"
 
 

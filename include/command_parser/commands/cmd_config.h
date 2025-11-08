@@ -1,4 +1,4 @@
-#ifndef __CMD_CONFIG_H__
+﻿#ifndef __CMD_CONFIG_H__
 #define __CMD_CONFIG_H__
 #include "../command.h"
 #include"../../repository.h"

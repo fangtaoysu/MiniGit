@@ -1,4 +1,4 @@
-/** 程序的入口位置
+﻿/** 程序的入口位置
  * 初始化仓库，加载配置文件 */
 #ifndef __REPOSITORY_H__
 #define __REPOSITORY_H__

@@ -1,4 +1,4 @@
-#ifndef __CMD_ADD_H__
+﻿#ifndef __CMD_ADD_H__
 #define __CMD_ADD_H__
 #include "../command.h"
 #include "../../utils.h"

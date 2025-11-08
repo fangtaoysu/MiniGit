@@ -1,4 +1,4 @@
-#include "../include/index.h"
+﻿#include "../include/index.h"
 #include "../include/file_system.h"
 #include "../include/utils.h"
 #include "../include/object_db.h"
@@ -68,10 +68,10 @@ void Index::add(const std::vector<fs::path>* files) const {
             std::string hash_value;
             bool is_commit = true;
             
-            if (FileSystem::is_text_file(file)) {
+            if (FileSystem::is_text_file(file.string())) {
                 // 如果是文本文件，读取内容并根据内容生成哈希
-                std::stringstream contents = FileSystem::read_file(file);
-                hash_value = Utils::get_hash(contents.str());
+                std::string contents = FileSystem::read_file(file);
+                hash_value = Utils::get_hash(contents);
             } else {
                 // 否则根据文件记录生成哈希
                 hash_value = Utils::get_hash(file.string());
@@ -86,18 +86,18 @@ void Index::add(const std::vector<fs::path>* files) const {
             std::lock_guard<std::mutex> lock(mtx);
             
             // 判断是否是修改的文件，是否是新增的文件
-            auto it = index_info.find(file);
+            auto it = index_info.find(file.string());
             if (it == index_info.end()) { // 如果当前路径不在其中，说明是新建的文件
-                create_files.push_back(file);
+                create_files.push_back(file.string());
                 ++count;
                 is_commit = false;
-            } else if (index_info[file]["hash"] != hash_value) {
+            } else if (index_info[file.string()]["hash"] != hash_value) {
                 ++count; // 如果是修改的的文件
                 is_commit = false;
             }
 
             // 2.3 得到这个文件的其他信息
-            index_info[file] = {
+            index_info[file.string()] = {
                 {"hash", hash_value},
                 {"size", size},
                 {"modified", modified},
@@ -126,12 +126,12 @@ void Index::status() {
         int64_t now_modified = FileSystem::get_file_timestamp(file);
         // 对file进行分类
         fs::path relative_path = fs::relative(file, project_path_);
-        if (!index.contains(file)) { // 如果为空字符 - untrack
+        if (!index.contains(file.string())) { // 如果为空字符 - untrack
             untrack.push_back(relative_path);
-        } else if (index.at(file).at("is_commit")) {
+        } else if (index.at(file.string()).at("is_commit")) {
             continue; // 文件已经commit
         } else {
-            int64_t index_modified = index.at(file).at("modified");
+            int64_t index_modified = index.at(file.string()).at("modified");
             if (now_modified != index_modified) { // 不一致 - not staged
                 not_staged.push_back(relative_path);
             } else if (now_modified == index_modified) { // 一致 - to be committed

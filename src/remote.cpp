@@ -1,4 +1,6 @@
+﻿#include "../database/include/git_db.h"
 #include "../include/remote.h"
+#include "../include/utils.h"
 #include <memory>
 #include <iostream>
 

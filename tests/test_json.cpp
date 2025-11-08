@@ -1,4 +1,4 @@
-#include "../thrid_party/nlohmann/json.hpp"
+﻿#include "../third_party/nlohmann/json.hpp"
 #include <fstream>
 #include <filesystem>
 #include <iostream>

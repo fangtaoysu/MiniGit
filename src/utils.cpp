@@ -1,6 +1,5 @@
-#include "../include/utils.h"
+﻿#include "../include/utils.h"
 #include <fstream>
-#include <openssl/sha.h> // sha-1 哈希
 #include <sstream>
 #include <iomanip>
 #include <chrono>
@@ -8,19 +7,55 @@
 #include <regex>
 #include <iostream>
 #include <ctime>
+#include <Windows.h>
+#include <wincrypt.h>
 
 
 
 /** 根据commit的消息生成哈希值(40位) */
 const std::string Utils::get_hash(const std::string& hash_source) {
-    unsigned char hash[SHA_DIGEST_LENGTH];
-    // std::string hash_source = msg_ + get_current_timestamp();
-    SHA1(reinterpret_cast<const unsigned char*>(hash_source.c_str()), hash_source.size(), hash);
+    HCRYPTPROV hProv = 0;
+    HCRYPTHASH hHash = 0;
+    unsigned char hash[20]; // SHA-1 produces 20 bytes
     std::stringstream ss;
-    for (int i = 0; i < SHA_DIGEST_LENGTH; ++i) {
+    
+    // Get context for cryptographic operations
+    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+        throw std::runtime_error("CryptAcquireContext failed");
+    }
+    
+    // Create hash object
+    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
+        CryptReleaseContext(hProv, 0);
+        throw std::runtime_error("CryptCreateHash failed");
+    }
+    
+    // Hash the data
+    if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(hash_source.c_str()), 
+                      static_cast<DWORD>(hash_source.size()), 0)) {
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hProv, 0);
+        throw std::runtime_error("CryptHashData failed");
+    }
+    
+    // Get the hash value
+    DWORD hashLen = 20;
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, hash, &hashLen, 0)) {
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hProv, 0);
+        throw std::runtime_error("CryptGetHashParam failed");
+    }
+    
+    // Convert to hex string
+    for (int i = 0; i < 20; ++i) {
         ss << std::hex << std::setw(2) << std::setfill('0')
            << static_cast<int>(hash[i]);
     }
+    
+    // Cleanup
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hProv, 0);
+    
     return ss.str();
 }
 

@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 #include "../include/index.h"
 #include <fstream>
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 
 namespace fs = std::filesystem;
 using json = nlohmann::json;

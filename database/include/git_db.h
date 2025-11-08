@@ -1,4 +1,4 @@
-#ifndef __GIT_DB_H__
+﻿#ifndef __GIT_DB_H__
 #define __GIT_DB_H__
 #include <sqlite3.h>
 #include <string>
@@ -21,14 +21,14 @@ class Database {
         void execute(const std::string& sql);
 
         // 执行查询、返回结果
-        std::vector<std::unordered_map<std::string, std::string>> query(const std::string& sql);
+        std::vector<std::unordered_map<std::string, std::string>> Query(const std::string& sql);
 
         // 参数化查询
         void execute_with_params(const std::string& sql, const std::vector<SQL_param>& params);
         std::vector<std::unordered_map<std::string, std::string>> query_with_params(const std::string& sql, const std::vector<SQL_param>& params);
-
+    
     private:
-        sqlite3* db_;
+        sqlite3* db_{nullptr};
 
         void check_error(int rc, const std::string& context);
 };

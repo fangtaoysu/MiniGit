@@ -1,7 +1,7 @@
-#ifndef __CONFIG_H__
+﻿#ifndef __CONFIG_H__
 #define __CONFIG_H__
 #include <string>
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 
 struct Core {
     std::string worktree;

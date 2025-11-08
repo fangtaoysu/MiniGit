@@ -1,4 +1,4 @@
-/** 项目入口 */
+﻿/** 项目入口 */
 #include "include/command_parser/command.h"
 #include "include/command_parser/command_dispatcher.h"
 #include "include/command_parser/commands/cmd_init.h"

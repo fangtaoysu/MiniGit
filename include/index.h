@@ -1,9 +1,9 @@
-/**实现git暂存区的功能 */
+﻿/**实现git暂存区的功能 */
 #ifndef __INDEX_H__
 #define __INDEX_H__
 #include <string>
 #include "utils.h"
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 
 
 using json = nlohmann::json;

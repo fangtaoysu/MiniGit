@@ -1,9 +1,9 @@
-#ifndef __UTILS_H__
+﻿#ifndef __UTILS_H__
 #define __UTILS_H__
 #include <string>
 #include <vector>
 #include <filesystem>
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 
 
 namespace fs = std::filesystem;
@@ -20,7 +20,6 @@ struct Utils {
     static std::string get_project_path();
     static std::vector<fs::path> filter_files(const std::vector<fs::path>* files);
     static std::string get_current_time();
-
 };
 
 #endif

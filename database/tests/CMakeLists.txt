@@ -1,4 +1,4 @@
-# 添加库搜索路径
+﻿# 添加库搜索路径
 link_directories(${CMAKE_BINARY_DIR}/lib)
 
 add_executable(test_database

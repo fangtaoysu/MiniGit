@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+﻿#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 #include "../include/file_system.h"
 #include <vector>
@@ -90,12 +90,12 @@ TEST(FileSystemTest, ReadFile) {
     // 测试1：正常读取文件
     // ---------------------------
     {
-        std::stringstream contents = FileSystem::read_file(test_file);
+        std::string contents = FileSystem::read_file(test_file);
         
         // 验证内容匹配
         std::stringstream expected;
         expected << test_content;
-        EXPECT_EQ(contents.str(), expected.str());
+        EXPECT_EQ(contents, expected.str());
         
         // 验证读取后流状态正常
         EXPECT_FALSE(contents.fail());

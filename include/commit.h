@@ -1,8 +1,8 @@
-#ifndef __COMMIT_H__
+﻿#ifndef __COMMIT_H__
 #define __COMMIT_H__
 
 #include "utils.h"
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 #include "file_system.h"
 #include "object_db.h"
 #include "index.h"

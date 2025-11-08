@@ -1,4 +1,4 @@
-#ifndef __DIFF_ENGINE_H__
+﻿#ifndef __DIFF_ENGINE_H__
 #define __DIFF_ENGINE_H__
 
 

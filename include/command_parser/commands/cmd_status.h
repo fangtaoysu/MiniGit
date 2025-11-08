@@ -1,4 +1,4 @@
-#ifndef __CMD_STATUS_H__
+﻿#ifndef __CMD_STATUS_H__
 #define __CMD_STATUS_H__
 #include "../parser.h"
 #include "../command.h"

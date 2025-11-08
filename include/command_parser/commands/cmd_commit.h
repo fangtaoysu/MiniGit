@@ -1,4 +1,4 @@
-#ifndef __CMD_COMMIT_H__
+﻿#ifndef __CMD_COMMIT_H__
 #define __CMD_COMMIT_H__
 
 #include "../command.h"

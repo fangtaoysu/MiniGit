@@ -1,4 +1,4 @@
-/** 提供文件的原子操作
+﻿/** 提供文件的原子操作
  *  - 文件指纹生成：快速判断文件是否被修改
  *  - 目录遍历：git add 需要用到
  *  - 文件内容读
@@ -13,7 +13,7 @@
 
 namespace fs = std::filesystem;
 struct FileSystem {
-    static std::stringstream read_file(const fs::path& file_path);
+    static std::string read_file(const fs::path& file_path);
     static size_t file_size(const std::string& file_path);
     static bool is_text_file(const std::string& file_path);
     static bool append_file_content(const std::string& file_path, const std::string& append_content);

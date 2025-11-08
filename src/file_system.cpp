@@ -1,10 +1,11 @@
-#include "../include/file_system.h"
+﻿#include "../include/file_system.h"
 #include <iostream>
 #include <chrono>
+#include <sstream>
 
 
 
-std::stringstream FileSystem::read_file(const fs::path& file_path) {
+std::string FileSystem::read_file(const fs::path& file_path) {
     // 确保静态变量只初始化一次（线程安全）
     std::stringstream ss;
     
@@ -36,7 +37,7 @@ std::stringstream FileSystem::read_file(const fs::path& file_path) {
         throw std::runtime_error("Error reading file: " + file_path.string());
     }
     
-    return ss;
+    return ss.str();
 }
 
 /** 获取文件大小 */

@@ -1,6 +1,7 @@
-#include "../include/commit.h"
+﻿#include "../include/commit.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 
 

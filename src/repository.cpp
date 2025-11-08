@@ -1,7 +1,7 @@
-#include "../include/repository.h"
+﻿#include "../include/repository.h"
 #include <stdexcept>
 #include <filesystem>
-#include "../thrid_party/nlohmann/json.hpp"
+#include "../third_party/nlohmann/json.hpp"
 #include "../include/config.h"
 
 

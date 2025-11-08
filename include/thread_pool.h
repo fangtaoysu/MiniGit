@@ -1,4 +1,4 @@
-#ifndef __THREAD_POOL_H__
+﻿#ifndef __THREAD_POOL_H__
 #define __THREAD_POOL_H__
 #include <functional>
 #include <future>

@@ -1,4 +1,4 @@
-#ifndef __COMMAND_DISPATCHER_H__
+﻿#ifndef __COMMAND_DISPATCHER_H__
 #define __COMMAND_DISPATCHER_H__
 
 

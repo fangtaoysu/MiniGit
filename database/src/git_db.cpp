@@ -1,4 +1,4 @@
-#include "../include/git_db.h"
+﻿#include "../include/git_db.h"
 #include <string>
 
 
@@ -32,7 +32,7 @@ void Database::execute(const std::string& sql) {
     }
 }
 
-std::vector<std::unordered_map<std::string, std::string>> Database::query(const std::string& sql) {
+std::vector<std::unordered_map<std::string, std::string>> Database::Query(const std::string& sql) {
     std::vector<std::unordered_map<std::string, std::string>> res;
     sqlite3_stmt* stmt;
 

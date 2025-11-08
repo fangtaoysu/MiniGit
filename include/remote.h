@@ -1,12 +1,11 @@
-#ifndef __REMOTE_H__
+﻿#ifndef __REMOTE_H__
 #define __REMOTE_H__
 #include <vector>
 #include <string>
 #include <unordered_map>
 #include <filesystem>
-#include "object_db.h"
-#include "../thrid_party/nlohmann/json.hpp"
 #include "../database/include/git_db.h"
+#include "../third_party/nlohmann/json.hpp"
 
 
 

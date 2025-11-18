@@ -28,6 +28,7 @@ file(GLOB MINIGIT_COMMON_SOURCES
     "src/infrastructure/config/*.cc"
     "src/infrastructure/logging/logger.cc"  # Only include the interface
     "src/infrastructure/concurrency/thread_pool_manager.cc"
+    "src/presentation/scanner.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})
@@ -147,3 +148,18 @@ target_link_libraries(
 )
 
 add_test(NAME thread_pool_manager_test COMMAND thread_pool_manager_test)
+
+# Add scanner_test executable
+add_executable(
+  scanner_test
+  tests/presentation/scanner_test.cc
+)
+
+target_link_libraries(
+  scanner_test
+  PRIVATE
+  minigit
+  gtest_main
+)
+
+add_test(NAME scanner_test COMMAND scanner_test)

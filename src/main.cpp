@@ -2,6 +2,9 @@
 #include "infrastructure/database/mysql_connection_pool.h"
 #include "infrastructure/logging/logger.h"
 #include "shared/path_utils.h"
+#include "infrastructure/concurrency/thread_pool_manager.h"
+#include <future>
+#include <iostream>
 
 int main() {
     // 1. 初始化日志记录器
@@ -36,6 +39,14 @@ int main() {
             LOG_ERROR("Failed to get a connection from the database pool.");
         }
     }
+
+    // 启动线程池
+    infrastructure::concurrency::ThreadPoolManager thread_pool(AppConfig::GetInstance().GetThreadPoolSettings().size);
+    std::future<int> future_result = thread_pool.SubmitTask([]() {
+        LOG_INFO("Task running in thread pool.");
+        return 42;
+    });
+    LOG_INFO("线程池已启动，result: " << future_result.get());
 
     return 0;
 }

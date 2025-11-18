@@ -27,6 +27,7 @@ endif()
 file(GLOB MINIGIT_COMMON_SOURCES
     "src/infrastructure/config/*.cc"
     "src/infrastructure/logging/logger.cc"  # Only include the interface
+    "src/infrastructure/concurrency/thread_pool_manager.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})
@@ -42,7 +43,10 @@ if(USE_MYSQL)
   file(GLOB MINIGIT_DB_SOURCES "src/infrastructure/database/*.cc")
   target_sources(minigit PRIVATE ${MINIGIT_DB_SOURCES})
 endif()
-target_include_directories(minigit PUBLIC src)
+target_include_directories(minigit PUBLIC 
+    src
+    ${CMAKE_SOURCE_DIR}
+)
 
 set(CONFIG_FILE_PATH "${CMAKE_SOURCE_DIR}/config/config.json")
 target_compile_definitions(minigit PRIVATE CONFIG_FILE_PATH=\"${CONFIG_FILE_PATH}\")
@@ -123,3 +127,19 @@ target_link_libraries(
 )
 
 add_test(NAME database_test COMMAND database_test)
+
+# Add thread_pool_manager_test executable
+add_executable(
+  thread_pool_manager_test
+  tests/infrastructure/concurrency/thread_pool_manager_test.cc
+)
+
+target_link_libraries(
+  thread_pool_manager_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
+
+add_test(NAME thread_pool_manager_test COMMAND thread_pool_manager_test)

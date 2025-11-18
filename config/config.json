@@ -8,5 +8,5 @@
     "password": "root",
     "database": "mini_git"
   },
-  "thread_pool": { "size": 0 }
+  "thread_pool": { "size": 8 }
 }

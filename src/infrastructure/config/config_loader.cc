@@ -31,7 +31,8 @@ void ConfigLoader::LoadConfig() {
             if (jm.contains("port")) config_.mysql.port = jm["port"].get<int>();
             if (jm.contains("user")) config_.mysql.user = jm["user"].get<std::string>();
             if (jm.contains("password")) config_.mysql.password = jm["password"].get<std::string>();
-            if (jm.contains("database")) config_.mysql.database = jm["database"].get<std::string>();
+            if (jm.contains("db_name")) config_.mysql.db_name = jm["db_name"].get<std::string>();
+            if (jm.contains("pool_size")) config_.mysql.pool_size = jm["pool_size"].get<int>();
         }
 
         if (j.contains("thread_pool")) {

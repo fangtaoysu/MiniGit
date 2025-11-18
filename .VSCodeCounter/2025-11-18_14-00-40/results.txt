@@ -1,0 +1,40 @@
+Date : 2025-11-18 14:00:40
+Directory : /data/fangtao/MiniGit/src
+Total : 11 files,  347 codes, 22 comments, 72 blanks, all 441 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         11 |        347 |         22 |         72 |        441 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                             | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                |         11 |        347 |         22 |         72 |        441 |
+| . (Files)                                                        |          1 |         12 |          1 |          4 |         17 |
+| infrastructure                                                   |          8 |        328 |         20 |         63 |        411 |
+| infrastructure/config                                            |          4 |         76 |          0 |         18 |         94 |
+| infrastructure/logging                                           |          4 |        252 |         20 |         45 |        317 |
+| shared                                                           |          2 |          7 |          1 |          5 |         13 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                         | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /data/fangtao/MiniGit/src/infrastructure/config/app_config.cc    | C++      |          0 |          0 |          1 |          1 |
+| /data/fangtao/MiniGit/src/infrastructure/config/app_config.h     | C++      |          0 |          0 |          1 |          1 |
+| /data/fangtao/MiniGit/src/infrastructure/config/config_loader.cc | C++      |         45 |          0 |          7 |         52 |
+| /data/fangtao/MiniGit/src/infrastructure/config/config_loader.h  | C++      |         31 |          0 |          9 |         40 |
+| /data/fangtao/MiniGit/src/infrastructure/logging/logger.cc       | C++      |         25 |          1 |          6 |         32 |
+| /data/fangtao/MiniGit/src/infrastructure/logging/logger.h        | C++      |        194 |         19 |         28 |        241 |
+| /data/fangtao/MiniGit/src/infrastructure/logging/logger_impl.cc  | C++      |         23 |          0 |          5 |         28 |
+| /data/fangtao/MiniGit/src/infrastructure/logging/logger_impl.h   | C++      |         10 |          0 |          6 |         16 |
+| /data/fangtao/MiniGit/src/main.cpp                               | C++      |         12 |          1 |          4 |         17 |
+| /data/fangtao/MiniGit/src/shared/path_utils.cc                   | C++      |          0 |          0 |          1 |          1 |
+| /data/fangtao/MiniGit/src/shared/path_utils.h                    | C++      |          7 |          1 |          4 |         12 |
+| Total                                                            |          |        347 |         22 |         72 |        441 |
++------------------------------------------------------------------+----------+------------+------------+------------+------------+

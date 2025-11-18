@@ -15,7 +15,8 @@ struct MySqlSettings {
     int port{3306};
     std::string user{"root"};
     std::string password{};
-    std::string database{};
+    std::string db_name{""};
+    int pool_size{0};
 };
 
 struct ThreadPoolSettings {

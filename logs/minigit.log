@@ -1,0 +1,2 @@
+2025/11/18 05:21:33 [266103] [INFO ] [infrastructure/config/config_loader.cc:42] Config loaded: /data/fangtao/MiniGit/config/config.json
+2025/11/18 05:21:33 [266103] [INFO ] [main.cpp:14] Config loaded. mysql.enable=true

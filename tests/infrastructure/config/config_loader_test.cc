@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include "infrastructure/config/config_loader.h"
+
 
 TEST(ConfigLoaderTest, LoadConfig) {
     minigit::infrastructure::config::ConfigLoader loader;

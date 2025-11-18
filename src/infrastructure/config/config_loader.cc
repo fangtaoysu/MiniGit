@@ -1,15 +1,19 @@
 #include "infrastructure/config/config_loader.h"
+
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <iostream>
+
+#include "infrastructure/logging/logger.h"
+#include "shared/path_utils.h"
 
 namespace minigit::infrastructure::config {
 
 void ConfigLoader::LoadConfig() {
-    std::string err;
     try {
-        std::ifstream ifs(PathUtils::GetProjectRoot() / "config" / "config.json");
+        const std::string config_path = PathUtils::GetProjectRoot() / "config" / "config.json";
+        std::ifstream ifs(config_path);
         if (!ifs.is_open()) {
+            LOG_ERROR("cannot open: " + config_path);
             return;
         }
         nlohmann::json j;
@@ -35,7 +39,9 @@ void ConfigLoader::LoadConfig() {
             if (jtp.contains("size")) config_.thread_pool.size = jtp["size"].get<int>();
         }
 
+        LOG_INFO("Config loaded: " + config_path);
     } catch (const std::exception& ex) {
+        LOG_ERROR("Config load error: " + std::string{ex.what()});
     }
 }
 

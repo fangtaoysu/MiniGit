@@ -3,8 +3,6 @@
 #include <string>
 #include <filesystem>
 
-#include "shared/path_utils.h"
-
 namespace minigit::infrastructure::config {
 
 struct LoggingSettings {

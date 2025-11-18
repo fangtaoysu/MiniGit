@@ -1,9 +1,6 @@
 #pragma once
-
 #include <string>
-#include <filesystem>
 
-namespace minigit::infrastructure::config {
 
 struct LoggingSettings {
     std::string level{"info"};
@@ -22,20 +19,3 @@ struct MySqlSettings {
 struct ThreadPoolSettings {
     int size{0};
 };
-
-struct Config {
-    LoggingSettings logging;
-    MySqlSettings mysql;
-    ThreadPoolSettings thread_pool;
-};
-
-class ConfigLoader {
-public:
-    void LoadConfig();
-    const Config& GetConfig() const;
-
-private:
-    Config config_;
-};
-
-}  // namespace minigit::infrastructure::config

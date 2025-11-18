@@ -15,23 +15,25 @@ int main() {
         LOG_FATAL("Failed to load application config. Exiting.");
         return 1;
     }
+    LOG_INFO("Application config loaded successfully.");
 
     // 3. 初始化数据库连接池
-    if (!MySQLConnectionPool::GetInstance().Init()) {
+    const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
+    if (!MySQLConnectionPool::GetInstance().Init(db_config)) {
         LOG_FATAL("Failed to initialize MySQL connection pool. Exiting.");
         return 1;
     }
+    LOG_INFO("database started successfully.");
 
-    LOG_INFO("Application started successfully.");
 
     // 示例：尝试获取一个数据库连接
-    if (AppConfig::GetInstance().GetDatabaseConfig().enable) {
+    if (db_config.enable) {
         auto conn = MySQLConnectionPool::GetInstance().GetConnection();
         if (conn) {
-            LOG_INFO("Successfully got a connection from the pool!");
+            LOG_INFO("Successfully got a connection from the database pool!");
             // 连接在使用完毕后会自动通过智能指针返回池中
         } else {
-            LOG_ERROR("Failed to get a connection from the pool.");
+            LOG_ERROR("Failed to get a connection from the database pool.");
         }
     }
 

@@ -10,6 +10,9 @@
 #include <cppconn/connection.h>
 #include <cppconn/exception.h>
 
+#include "shared/model.h"
+
+
 namespace sql {
     class Connection;
 }
@@ -18,7 +21,7 @@ class MySQLConnectionPool {
 public:
     static MySQLConnectionPool& GetInstance();
 
-    bool Init();
+    bool Init(const MySqlSettings& db_config);
     std::shared_ptr<sql::Connection> GetConnection();
 
     MySQLConnectionPool(const MySQLConnectionPool&) = delete;

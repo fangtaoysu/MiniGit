@@ -1,4 +1,5 @@
 #include "mysql_connection_pool.h"
+
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
@@ -6,7 +7,6 @@
 #include <cppconn/prepared_statement.h>
 
 #include "infrastructure/logging/logger.h"
-#include "infrastructure/config/config_loader.h"
 
 
 MySQLConnectionPool& MySQLConnectionPool::GetInstance() {
@@ -14,14 +14,10 @@ MySQLConnectionPool& MySQLConnectionPool::GetInstance() {
     return instance;
 }
 
-bool MySQLConnectionPool::Init() {
+bool MySQLConnectionPool::Init(const MySqlSettings& db_config) {
     if (initialized_) {
         return true;
     }
-
-    minigit::infrastructure::config::ConfigLoader loader;
-    loader.LoadConfig();
-    const auto& db_config = loader.GetConfig().mysql;
 
     if (!db_config.enable) {
         LOG_INFO("MySQL is disabled in config, skipping connection pool initialization.");

@@ -39,8 +39,12 @@ if(USE_LOG4CPLUS)
 endif()
 
 if(USE_MYSQL)
-  # Automatically discover database source files and add them conditionally
-  file(GLOB MINIGIT_DB_SOURCES "src/infrastructure/database/*.cc")
+  # Add database source files
+  set(MINIGIT_DB_SOURCES
+    "src/infrastructure/database/connection_pool.cc"
+    "src/infrastructure/database/db_connection_guard.cc"
+    "src/infrastructure/database/database_manager.cc"
+  )
   target_sources(minigit PRIVATE ${MINIGIT_DB_SOURCES})
 endif()
 target_include_directories(minigit PUBLIC 

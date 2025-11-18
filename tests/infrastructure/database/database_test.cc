@@ -1,44 +1,140 @@
 #include <gtest/gtest.h>
 #include "infrastructure/config/app_config.h"
-#include "infrastructure/database/mysql_connection_pool.h"
+#include "infrastructure/database/database_manager.h"
 
-class DatabaseIntegrationTest : public ::testing::Test {
+using namespace infrastructure::database;
+
+class DatabaseManagerTest : public ::testing::Test {
 protected:
-    void SetUp() override {
-        // The CONFIG_FILE_PATH macro is passed in by CMakeLists.txt.
-        // This ensures the test can always find the config file.
+    static void SetUpTestSuite() {
+        // 在所有测试开始前，加载配置并初始化 DbManager
         bool config_loaded = AppConfig::GetInstance().LoadConfig(CONFIG_FILE_PATH);
         ASSERT_TRUE(config_loaded) << "Failed to load application config for testing.";
+        
+        const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
+        ASSERT_TRUE(db_config.enable) << "Database is not enabled in the test config.";
+
+        bool db_initialized = DbManager::GetInstance().Initialize(db_config);
+        ASSERT_TRUE(db_initialized) << "Database Manager failed to initialize.";
+    }
+
+    void SetUp() override {
+        // 在每个测试开始前，确保我们有一个干净的测试表
+        const std::string create_table_sql = 
+            "CREATE TABLE IF NOT EXISTS test_users ("
+            "id INT AUTO_INCREMENT PRIMARY KEY,"
+            "name VARCHAR(255) NOT NULL,"
+            "email VARCHAR(255) UNIQUE NOT NULL"
+            ")";
+        DbManager::GetInstance().Execute(create_table_sql);
+        DbManager::GetInstance().Execute("DELETE FROM test_users");
+    }
+
+    void TearDown() override {
+        // 在每个测试结束后，清理测试表
+        DbManager::GetInstance().Execute("DELETE FROM test_users");
     }
 };
 
-// Tests if AppConfig correctly loads database settings.
-TEST_F(DatabaseIntegrationTest, ShouldLoadDatabaseConfigCorrectly) {
-    const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
+// 测试基本的插入和查询操作
+TEST_F(DatabaseManagerTest, ShouldExecuteInsertAndQuery) {
+    // 插入
+    int64_t affected_rows = DbManager::GetInstance().Execute(
+        "INSERT INTO test_users (name, email) VALUES (?, ?)", {"test_user", "test@example.com"}
+    );
+    ASSERT_EQ(affected_rows, 1);
 
-    // Verify that the values loaded from config.json match expectations.
-    EXPECT_TRUE(db_config.enable);
-    EXPECT_EQ(db_config.host, "127.0.0.1");
-    EXPECT_EQ(db_config.user, "root");
-    EXPECT_FALSE(db_config.db_name.empty());
-    EXPECT_GT(db_config.pool_size, 0);
+    // 查询
+    auto results = DbManager::GetInstance().Query(
+        "SELECT name, email FROM test_users WHERE email = ?", {"test@example.com"}
+    );
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0]["name"], "test_user");
+    EXPECT_EQ(results[0]["email"], "test@example.com");
 }
 
-// Tests if the MySQL connection pool can be initialized and a connection can be obtained.
-TEST_F(DatabaseIntegrationTest, ShouldInitializePoolAndGetConnection) {
-    const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
-    ASSERT_TRUE(db_config.enable) << "Database is not enabled in the test config.";
+// 测试更新操作
+TEST_F(DatabaseManagerTest, ShouldExecuteUpdate) {
+    DbManager::GetInstance().Execute(
+        "INSERT INTO test_users (name, email) VALUES (?, ?)", {"initial_name", "update@example.com"}
+    );
 
-    // Initialize the pool with the loaded configuration.
-    bool pool_initialized = MySQLConnectionPool::GetInstance().Init(db_config);
-    ASSERT_TRUE(pool_initialized) << "MySQL connection pool failed to initialize.";
+    // 更新
+    int64_t affected_rows = DbManager::GetInstance().Execute(
+        "UPDATE test_users SET name = ? WHERE email = ?", {"updated_name", "update@example.com"}
+    );
+    ASSERT_EQ(affected_rows, 1);
 
-    // Try to get a connection.
-    auto conn = MySQLConnectionPool::GetInstance().GetConnection();
-    
-    // Verify that we received a valid connection object.
-    ASSERT_NE(conn, nullptr) << "Failed to get a valid connection from the pool.";
-    
-    // A simple check to see if the connection is usable.
-    EXPECT_FALSE(conn->isClosed()) << "Connection is closed immediately after retrieval.";
+    // 验证更新
+    auto results = DbManager::GetInstance().Query(
+        "SELECT name FROM test_users WHERE email = ?", {"update@example.com"}
+    );
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0]["name"], "updated_name");
+}
+
+// 测试删除操作
+TEST_F(DatabaseManagerTest, ShouldExecuteDelete) {
+    DbManager::GetInstance().Execute(
+        "INSERT INTO test_users (name, email) VALUES (?, ?)", {"to_delete", "delete@example.com"}
+    );
+
+    // 删除
+    int64_t affected_rows = DbManager::GetInstance().Execute(
+        "DELETE FROM test_users WHERE email = ?", {"delete@example.com"}
+    );
+    ASSERT_EQ(affected_rows, 1);
+
+    // 验证删除
+    auto results = DbManager::GetInstance().Query(
+        "SELECT name FROM test_users WHERE email = ?", {"delete@example.com"}
+    );
+    ASSERT_TRUE(results.empty());
+}
+
+// 测试事务提交
+TEST_F(DatabaseManagerTest, ShouldCommitTransaction) {
+    DbManager::GetInstance().BeginTransaction();
+    DbManager::GetInstance().Execute(
+        "INSERT INTO test_users (name, email) VALUES (?, ?)", {"tx_commit", "commit@example.com"}
+    );
+    DbManager::GetInstance().CommitTransaction();
+
+    // 在事务外部验证数据是否存在
+    auto results = DbManager::GetInstance().Query(
+        "SELECT name FROM test_users WHERE email = ?", {"commit@example.com"}
+    );
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0]["name"], "tx_commit");
+}
+
+// 测试事务回滚
+TEST_F(DatabaseManagerTest, ShouldRollbackTransaction) {
+    DbManager::GetInstance().BeginTransaction();
+    DbManager::GetInstance().Execute(
+        "INSERT INTO test_users (name, email) VALUES (?, ?)", {"tx_rollback", "rollback@example.com"}
+    );
+    DbManager::GetInstance().RollbackTransaction();
+
+    // 在事务外部验证数据是否不存在
+    auto results = DbManager::GetInstance().Query(
+        "SELECT name FROM test_users WHERE email = ?", {"rollback@example.com"}
+    );
+    ASSERT_TRUE(results.empty());
+}
+
+// 测试无效查询
+TEST_F(DatabaseManagerTest, ShouldHandleInvalidQueryGracefully) {
+    // 这个查询会因为表名错误而失败
+    auto results = DbManager::GetInstance().Query("SELECT * FROM non_existent_table");
+    // 期望返回一个空的结果集，而不是抛出异常或崩溃
+    ASSERT_TRUE(results.empty());
+}
+
+// 测试无效执行
+TEST_F(DatabaseManagerTest, ShouldHandleInvalidExecuteGracefully) {
+    // 这个执行会因为语法错误而失败
+    int64_t affected_rows = DbManager::GetInstance().Execute("INSERTT INTO test_users (name) VALUES ('fail')");
+    // 期望返回 -1，而不是抛出异常或崩溃
+    ASSERT_EQ(affected_rows, -1);
 }

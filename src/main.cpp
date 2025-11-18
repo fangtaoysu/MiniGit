@@ -1,5 +1,5 @@
 #include "infrastructure/config/app_config.h"
-#include "infrastructure/database/mysql_connection_pool.h"
+#include "infrastructure/database/database_manager.h"
 #include "infrastructure/logging/logger.h"
 #include "shared/path_utils.h"
 #include "infrastructure/concurrency/thread_pool_manager.h"
@@ -20,23 +20,22 @@ int main() {
     }
     LOG_INFO("Application config loaded successfully.");
 
-    // 3. 初始化数据库连接池
+    // 3. 初始化数据库管理器
     const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
-    if (!MySQLConnectionPool::GetInstance().Init(db_config)) {
-        LOG_FATAL("Failed to initialize MySQL connection pool. Exiting.");
+    if (!infrastructure::database::DbManager::GetInstance().Initialize(db_config)) {
+        LOG_FATAL("Failed to initialize Database Manager. Exiting.");
         return 1;
     }
-    LOG_INFO("database started successfully.");
+    LOG_INFO("Database Manager started successfully.");
 
 
-    // 示例：尝试获取一个数据库连接
+    // 示例：执行一个简单的数据库查询
     if (db_config.enable) {
-        auto conn = MySQLConnectionPool::GetInstance().GetConnection();
-        if (conn) {
-            LOG_INFO("Successfully got a connection from the database pool!");
-            // 连接在使用完毕后会自动通过智能指针返回池中
-        } else {
-            LOG_ERROR("Failed to get a connection from the database pool.");
+        try {
+            auto result = infrastructure::database::DbManager::GetInstance().Query("SELECT 1", {});
+            LOG_INFO("Successfully executed a test query against the database!");
+        } catch (const std::exception& e) {
+            LOG_ERROR("Failed to execute test query: " << e.what());
         }
     }
 

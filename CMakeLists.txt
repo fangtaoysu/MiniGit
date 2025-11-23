@@ -28,7 +28,7 @@ file(GLOB MINIGIT_COMMON_SOURCES
     "src/infrastructure/config/*.cc"
     "src/infrastructure/logging/logger.cc"  # Only include the interface
     "src/infrastructure/concurrency/thread_pool_manager.cc"
-    "src/presentation/scanner.cc"
+    "src/presentation/lexer.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})
@@ -148,3 +148,19 @@ target_link_libraries(
 )
 
 add_test(NAME thread_pool_manager_test COMMAND thread_pool_manager_test)
+
+# Add lexer_test executable
+add_executable(
+  lexer_test
+  tests/presentation/lexer_test.cc
+)
+
+target_link_libraries(
+  lexer_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
+
+add_test(NAME lexer_test COMMAND lexer_test)

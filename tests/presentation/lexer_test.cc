@@ -2,11 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include "infrastructure/config/app_config.h"
 #include "infrastructure/logging/logger.h"
 #include "presentation/model.h"
 
-using namespace minigit::infrastructure::config;
 using namespace minigit::infrastructure::logging;
 using namespace minigit::presentation;
 using namespace minigit::shared;
@@ -105,15 +103,8 @@ int main(int argc, char** argv) {
     const std::filesystem::path project_root = GetProjectRoot();
     std::filesystem::path log_config_path =
         project_root / "config" / "log4cplus.properties";
-
     InitImLogger(log_config_path.string());
 
-    std::filesystem::path app_config_path =
-        project_root / "config" / "config.json";
-    if (!AppConfig::GetInstance().LoadConfig(app_config_path)) {
-        LOG_FATAL("Failed to load application config. Exiting.");
-        return 1;
-    }
 
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

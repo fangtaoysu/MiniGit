@@ -5,11 +5,11 @@
 
 namespace minigit::presentation {
 
-
-void CommandEngine::RegisterCommand(const std::string& command_name,
-                                    std::unique_ptr<Validator> validator,
-                                    std::unique_ptr<minigit::application::CmdExecutor> executor) {
-    command_registry_[command_name] = {std::move(validator), std::move(executor)};
+void CommandEngine::RegisterCommand(
+    const std::string& command_name, std::unique_ptr<Validator> validator,
+    std::unique_ptr<minigit::application::CmdExecutor> executor) {
+    command_registry_[command_name] = {std::move(validator),
+                                       std::move(executor)};
 }
 
 void CommandEngine::Execute(const std::string& command_str) {
@@ -17,9 +17,10 @@ void CommandEngine::Execute(const std::string& command_str) {
     Lexer lexer;
     const CommandContext splited_cmd = lexer.LexicalAnalyze(command_str);
     LOG_INFO("splited cmd: " << splited_cmd.cmd);
-    
+
     // NOTE: 如果用move，会移走注册表中的内容，下次 调用时就会报错
-    // auto [validator, executor] = std::move(command_registry_[splited_cmd.cmd]);
+    // auto [validator, executor] =
+    // std::move(command_registry_[splited_cmd.cmd]);
 
     auto it = command_registry_.find(splited_cmd.cmd);
     if (it == command_registry_.end()) {
@@ -45,7 +46,7 @@ void CommandEngine::Execute(const std::string& command_str) {
     LOG_INFO("Command validation succeeded for command: " << command_str);
 
     try {
-        executor->Execute(splited_cmd); 
+        executor->Execute(splited_cmd);
     } catch (const std::exception& e) {
         LOG_ERROR("Execution failed for command: "
                   << command_str << " with error: " << e.what());

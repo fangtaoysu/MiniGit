@@ -105,7 +105,6 @@ int main(int argc, char** argv) {
         project_root / "config" / "log4cplus.properties";
     InitImLogger(log_config_path.string());
 
-
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

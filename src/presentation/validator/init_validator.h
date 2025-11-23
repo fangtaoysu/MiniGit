@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "presentation/validator.h"
 #include "presentation/model.h"
+#include "presentation/validator.h"
 
 using CommandContext = minigit::presentation::CommandContext;
 

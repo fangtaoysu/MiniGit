@@ -168,18 +168,18 @@ target_link_libraries(
 
 add_test(NAME lexer_test COMMAND lexer_test)
 
-# # Add command_engine_test executable
-# add_executable(
-#   command_engine_test
-#   tests/presentation/command_engine_test.cc
-# )
+# Add command_engine_test executable
+add_executable(
+  command_engine_test
+  tests/presentation/command_engine_test.cc
+)
 
-# target_link_libraries(
-#   command_engine_test
-#   PRIVATE
-#   minigit
-#   gtest_main
-#   ${LOG4CPLUS_LIBRARY}
-# )
+target_link_libraries(
+  command_engine_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
 
-# add_test(NAME command_engine_test COMMAND command_engine_test)
+add_test(NAME command_engine_test COMMAND command_engine_test)

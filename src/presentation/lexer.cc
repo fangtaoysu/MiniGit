@@ -4,6 +4,7 @@
 
 #include "infrastructure/logging/logger.h"
 
+namespace minigit::presentation {
 LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
     LOG_INFO("Lexical analyzing command: " << command_str);
     LexicalResult result;
@@ -105,3 +106,4 @@ std::vector<std::string> Lexer::Tokenize(const std::string& command_str) {
     LOG_INFO("\t" << tokenized_str);
     return tokens;
 }
+}  // namespace minigit::presentation

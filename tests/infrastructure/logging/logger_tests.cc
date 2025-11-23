@@ -2,11 +2,12 @@
 
 #include "infrastructure/logging/logger.h"
 
+using minigit::infrastructure::logging::InitImLogger;
 // 实现对INFO、Warning、Error级别的日志记录
 TEST(LoggerTest, InitializeAndLog) {
     // Initialize the logger using the config file
     std::filesystem::path log_config_path =
-        PathUtils::GetProjectRoot() / "config" / "log4cplus.properties";
+        minigit::shared::GetProjectRoot() / "config" / "log4cplus.properties";
     InitImLogger(log_config_path.string());
 
     // Log messages at different levels to ensure it doesn't crash

@@ -5,7 +5,7 @@
 
 #include "third_party/BS_thread_pool.hpp"
 
-namespace infrastructure::concurrency {
+namespace minigit::infrastructure::concurrency {
 
 /**
  * @class ThreadPoolManager
@@ -62,4 +62,4 @@ private:
     BS::thread_pool<> pool_;
 };
 
-}  // namespace infrastructure::concurrency
+}  // namespace minigit::infrastructure::concurrency

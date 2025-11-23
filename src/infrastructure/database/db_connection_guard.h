@@ -4,7 +4,7 @@
 
 #include "infrastructure/database/connection_pool.h"
 
-namespace infrastructure::database {
+namespace minigit::infrastructure::database {
 
 /**
  * @class DbConnectionGuard
@@ -31,4 +31,4 @@ private:
     sql::Connection* connection_;
 };
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

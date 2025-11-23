@@ -1,8 +1,6 @@
-// src/infrastructure/concurrency/thread_pool_manager.cc
-
 #include "thread_pool_manager.h"
 
-namespace infrastructure::concurrency {
+namespace minigit::infrastructure::concurrency {
 
 ThreadPoolManager::ThreadPoolManager(const size_t thread_count)
     : pool_(thread_count > 0 ? thread_count
@@ -13,4 +11,4 @@ ThreadPoolManager::~ThreadPoolManager() {
     // so no explicit wait call is needed here for graceful shutdown.
 }
 
-}  // namespace infrastructure::concurrency
+}  // namespace minigit::infrastructure::concurrency

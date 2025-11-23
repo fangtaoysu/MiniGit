@@ -9,7 +9,7 @@
 
 #include "infrastructure/config/app_config.h"
 
-namespace infrastructure::database {
+namespace minigit::infrastructure::database {
 
 class DbConnectionPool;
 class DbConnectionGuard;
@@ -20,7 +20,7 @@ class DbManager {
 public:
     static DbManager& GetInstance();
 
-    bool Initialize(const MySqlSettings& config);
+    bool Initialize(const utils::MySqlSettings& config);
 
     std::vector<QueryResult> Query(const std::string& sql,
                                    const std::vector<std::string>& params = {});
@@ -45,4 +45,4 @@ private:
     static thread_local sql::Connection* transaction_connection_;
 };
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

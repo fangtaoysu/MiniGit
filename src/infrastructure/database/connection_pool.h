@@ -12,7 +12,9 @@
 
 #include "infrastructure/config/app_config.h"
 
-namespace infrastructure::database {
+namespace utils = minigit::shared;
+
+namespace minigit::infrastructure::database {
 
 class DbConnectionPool {
 public:
@@ -23,7 +25,7 @@ public:
     DbConnectionPool(const DbConnectionPool&) = delete;
     DbConnectionPool& operator=(const DbConnectionPool&) = delete;
 
-    bool Init(const MySqlSettings& db_config);
+    bool Init(const utils::MySqlSettings& db_config);
     sql::Connection* GetConnection();
     void ReleaseConnection(sql::Connection* conn);
 
@@ -45,4 +47,4 @@ private:
     sql::Driver* driver_;
 };
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

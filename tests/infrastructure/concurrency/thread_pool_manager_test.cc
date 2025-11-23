@@ -7,7 +7,7 @@
 #include <thread>
 #include <vector>
 
-using namespace infrastructure::concurrency;
+using namespace minigit::infrastructure::concurrency;
 
 // Test fixture for ThreadPoolManager tests
 class ThreadPoolManagerTest : public ::testing::Test {};

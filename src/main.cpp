@@ -7,26 +7,31 @@
 #include "infrastructure/logging/logger.h"
 #include "shared/path_utils.h"
 
+namespace thread_pool = minigit::infrastructure::concurrency;
+namespace cfg = minigit::infrastructure::config;
+namespace db = minigit::infrastructure::database;
+namespace logging = minigit::infrastructure::logging;
+namespace utils = minigit::shared;
+
 int main() {
     // 1. 初始化日志记录器
-    std::filesystem::path project_root = PathUtils::GetProjectRoot();
+    std::filesystem::path project_root = utils::GetProjectRoot();
     std::filesystem::path log_config_path =
         project_root / "config" / "log4cplus.properties";
-    InitImLogger(log_config_path);
+    logging::InitImLogger(log_config_path.string());
 
     // 2. 加载应用配置
     std::filesystem::path app_config_path =
         project_root / "config" / "config.json";
-    if (!AppConfig::GetInstance().LoadConfig(app_config_path)) {
+    if (!cfg::AppConfig::GetInstance().LoadConfig(app_config_path)) {
         LOG_FATAL("Failed to load application config. Exiting.");
         return 1;
     }
     LOG_INFO("Application config loaded successfully.");
 
     // 3. 初始化数据库管理器
-    const auto& db_config = AppConfig::GetInstance().GetMySqlSettings();
-    if (!infrastructure::database::DbManager::GetInstance().Initialize(
-            db_config)) {
+    const auto& db_config = cfg::AppConfig::GetInstance().GetMySqlSettings();
+    if (!db::DbManager::GetInstance().Initialize(db_config)) {
         LOG_FATAL("Failed to initialize Database Manager. Exiting.");
         return 1;
     }
@@ -35,9 +40,7 @@ int main() {
     // 示例：执行一个简单的数据库查询
     if (db_config.enable) {
         try {
-            auto result =
-                infrastructure::database::DbManager::GetInstance().Query(
-                    "SELECT 1", {});
+            auto result = db::DbManager::GetInstance().Query("SELECT 1", {});
             LOG_INFO(
                 "Successfully executed a test query against the database!");
         } catch (const std::exception& e) {
@@ -46,8 +49,8 @@ int main() {
     }
 
     // 启动线程池
-    infrastructure::concurrency::ThreadPoolManager thread_pool(
-        AppConfig::GetInstance().GetThreadPoolSettings().size);
+    thread_pool::ThreadPoolManager thread_pool(
+        cfg::AppConfig::GetInstance().GetThreadPoolSettings().size);
     std::future<int> future_result = thread_pool.SubmitTask([]() {
         LOG_INFO("Task running in thread pool.");
         return 42;

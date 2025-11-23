@@ -3,7 +3,8 @@
 #include "infrastructure/config/app_config.h"
 #include "infrastructure/database/database_manager.h"
 
-using namespace infrastructure::database;
+using namespace minigit::infrastructure::database;
+using namespace minigit::infrastructure::config;
 
 class DatabaseManagerTest : public ::testing::Test {
 protected:

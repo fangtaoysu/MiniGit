@@ -23,6 +23,8 @@ static void init_im_log4cplus_logger(const std::string &logfile) {
     }
 }
 
+namespace minigit::infrastructure::logging {
 void InitImLogger(const std::string &logfile) {
     init_im_log4cplus_logger(logfile);
 }
+}  // namespace minigit::infrastructure::logging

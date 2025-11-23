@@ -1,6 +1,6 @@
 #include "infrastructure/database/db_connection_guard.h"
 
-namespace infrastructure::database {
+namespace minigit::infrastructure::database {
 
 DbConnectionGuard::DbConnectionGuard(DbConnectionPool& pool)
     : pool_(pool), connection_(pool.GetConnection()) {}
@@ -15,4 +15,4 @@ sql::Connection* DbConnectionGuard::operator->() const { return connection_; }
 
 sql::Connection* DbConnectionGuard::get() const { return connection_; }
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

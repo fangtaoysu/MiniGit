@@ -5,6 +5,7 @@
 
 #include "infrastructure/config/app_config.h"
 
+using namespace minigit::infrastructure::config;
 // Test fixture for AppConfig tests to handle temporary file creation and
 // cleanup.
 class AppConfigTest : public ::testing::Test {

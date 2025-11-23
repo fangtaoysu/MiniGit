@@ -1,11 +1,15 @@
-#include "src/presentation/lexer.h"
+#include "presentation/lexer.h"
 
 #include <gtest/gtest.h>
 
-#include "src/infrastructure/logging/logger.h"
-#include "src/shared/model.h"
 #include "infrastructure/config/app_config.h"
+#include "infrastructure/logging/logger.h"
+#include "presentation/model.h"
 
+using namespace minigit::infrastructure::config;
+using namespace minigit::infrastructure::logging;
+using namespace minigit::presentation;
+using namespace minigit::shared;
 
 // Helper function to compare two LexicalResult objects for equality.
 void AssertResultEqual(const LexicalResult& actual,
@@ -60,7 +64,6 @@ TEST(LexerTest, HandlesAddWithMultipleFiles) {
     expected.file_path = {"src/main.cc", "include/app.h"};
 
     AssertResultEqual(actual, expected);
-
 }
 
 TEST(LexerTest, HandlesComplexCommitCommand) {
@@ -74,7 +77,6 @@ TEST(LexerTest, HandlesComplexCommitCommand) {
     expected.argument = {"new message"};
 
     AssertResultEqual(actual, expected);
-
 }
 
 TEST(LexerTest, HandlesCommandWithoutGitPrefix) {
@@ -86,7 +88,6 @@ TEST(LexerTest, HandlesCommandWithoutGitPrefix) {
     expected.command = "status";
 
     AssertResultEqual(actual, expected);
-
 }
 
 TEST(LexerTest, HandlesEmptyCommand) {
@@ -101,13 +102,14 @@ TEST(LexerTest, HandlesEmptyCommand) {
 
 int main(int argc, char** argv) {
     // Initialize the logger
+    const std::filesystem::path project_root = GetProjectRoot();
     std::filesystem::path log_config_path =
-        PathUtils::GetProjectRoot() / "config" / "log4cplus.properties";
+        project_root / "config" / "log4cplus.properties";
 
     InitImLogger(log_config_path.string());
 
     std::filesystem::path app_config_path =
-        PathUtils::GetProjectRoot() / "config" / "config.json";
+        project_root / "config" / "config.json";
     if (!AppConfig::GetInstance().LoadConfig(app_config_path)) {
         LOG_FATAL("Failed to load application config. Exiting.");
         return 1;

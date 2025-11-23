@@ -2,6 +2,7 @@
 
 #include "infrastructure/logging/logger.h"
 
+namespace minigit::presentation {
 std::unordered_map<std::string, std::unique_ptr<Validator>>
     CommandEngine::validators_;
 
@@ -24,3 +25,4 @@ void CommandEngine::ValidateCommand(const LexicalResult& cmd) {
                   << cmd.command << " with error: " << e.what());
     }
 }
+}  // namespace minigit::presentation

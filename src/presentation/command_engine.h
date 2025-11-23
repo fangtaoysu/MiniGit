@@ -6,6 +6,7 @@
 
 #include "presentation/validator.h"
 
+namespace minigit::presentation {
 class CommandEngine {
 public:
     static void RegisterCommand(const std::string& command_name,
@@ -17,3 +18,4 @@ private:
     static std::unordered_map<std::string, std::unique_ptr<Validator>>
         validators_;
 };
+}  // namespace minigit::presentation

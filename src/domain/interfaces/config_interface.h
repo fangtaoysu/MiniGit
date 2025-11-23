@@ -3,7 +3,7 @@
 #include <optional>
 #include <string>
 
-namespace domain::interfaces {
+namespace minigit::domain::interfaces {
 
 /**
  * @brief Defines the contract for accessing application configuration.
@@ -44,4 +44,4 @@ public:
         const std::string& key) const = 0;
 };
 
-}  // namespace domain::interfaces
+}  // namespace minigit::domain::interfaces

@@ -10,7 +10,7 @@
 #include "infrastructure/database/db_connection_guard.h"
 #include "infrastructure/logging/logger.h"
 
-namespace infrastructure::database {
+namespace minigit::infrastructure::database {
 
 // Initialize the static thread_local variable
 thread_local sql::Connection* DbManager::transaction_connection_ = nullptr;
@@ -20,7 +20,7 @@ DbManager& DbManager::GetInstance() {
     return instance;
 }
 
-bool DbManager::Initialize(const MySqlSettings& config) {
+bool DbManager::Initialize(const utils::MySqlSettings& config) {
     if (!config.enable) {
         LOG_WARN("Database Manager initialization skipped: MySQL is disabled.");
         return true;  // Return true as it's a valid state
@@ -174,4 +174,4 @@ DbManager::GetConnectionForOperation() {
     }
 }
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

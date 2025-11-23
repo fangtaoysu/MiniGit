@@ -6,7 +6,11 @@
 
 #include "shared/model.h"
 
+namespace utils = minigit::shared;
+
 // 用于管理所有应用配置的单例类
+namespace minigit::infrastructure::config {
+
 class AppConfig {
 public:
     // 获取 AppConfig 的唯一实例
@@ -17,9 +21,11 @@ public:
     bool LoadConfig(const std::filesystem::path& config_file);
 
     // 获取配置结构体的 const 引用
-    const LoggingSettings& GetLoggingSettings() const { return logging_; }
-    const MySqlSettings& GetMySqlSettings() const { return mysql_; }
-    const ThreadPoolSettings& GetThreadPoolSettings() const {
+    const utils::LoggingSettings& GetLoggingSettings() const {
+        return logging_;
+    }
+    const utils::MySqlSettings& GetMySqlSettings() const { return mysql_; }
+    const utils::ThreadPoolSettings& GetThreadPoolSettings() const {
         return thread_pool_;
     }
 
@@ -35,7 +41,9 @@ public:
 
 private:
     // Configuration members initialized with default values.
-    MySqlSettings mysql_{};
-    LoggingSettings logging_{"info"};
-    ThreadPoolSettings thread_pool_{4};
+    utils::MySqlSettings mysql_{};
+    utils::LoggingSettings logging_{"info"};
+    utils::ThreadPoolSettings thread_pool_{4};
 };
+
+}  // namespace minigit::infrastructure::config

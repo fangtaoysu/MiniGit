@@ -4,11 +4,11 @@
 
 #include "infrastructure/logging/logger.h"
 
-namespace infrastructure::database {
+namespace minigit::infrastructure::database {
 
 DbConnectionPool::~DbConnectionPool() { CloseAllConnections(); }
 
-bool DbConnectionPool::Init(const MySqlSettings& db_config) {
+bool DbConnectionPool::Init(const utils::MySqlSettings& db_config) {
     if (!db_config.enable) {
         LOG_WARN("MySQL is disabled in the configuration.");
         return false;
@@ -97,4 +97,4 @@ sql::Connection* DbConnectionPool::CreateConnection() {
     }
 }
 
-}  // namespace infrastructure::database
+}  // namespace minigit::infrastructure::database

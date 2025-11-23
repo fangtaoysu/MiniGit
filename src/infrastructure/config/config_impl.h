@@ -3,9 +3,11 @@
 #include "domain/interfaces/config_interface.h"
 #include "infrastructure/config/app_config.h"
 
+namespace interfaces = minigit::domain::interfaces;
+
 namespace minigit::infrastructure::config {
 
-class ConfigurationImpl : public domain::interfaces::IConfiguration {
+class ConfigurationImpl : public interfaces::IConfiguration {
 public:
     // Dependency Injection: Constructor takes a reference to the config source.
     explicit ConfigurationImpl(const AppConfig& config);

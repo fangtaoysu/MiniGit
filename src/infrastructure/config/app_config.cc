@@ -1,7 +1,9 @@
-#include "app_config.h"
+#include "infrastructure/config/app_config.h"
 
 #include <fstream>
 #include <iostream>
+
+namespace minigit::infrastructure::config {
 
 AppConfig& AppConfig::GetInstance() {
     static AppConfig instance;
@@ -46,3 +48,5 @@ bool AppConfig::LoadConfig(const std::filesystem::path& config_file) {
         return false;
     }
 }
+
+}  // namespace minigit::infrastructure::config

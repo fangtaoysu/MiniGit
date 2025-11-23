@@ -16,8 +16,9 @@
 #include "shared/path_utils.h"
 
 extern log4cplus::Logger gLogger;
-
+namespace minigit::infrastructure::logging {
 void InitImLogger(const std::string &logfile);
+}
 
 namespace logging_detail {
 
@@ -70,7 +71,7 @@ public:
         : m_logger(logger), m_level(level), m_moved(false) {
         std::string file_path = file;
         std::string project_src_path =
-            (PathUtils::GetProjectRoot() / "src").string();
+            (minigit::shared::GetProjectRoot() / "src").string();
 
         // 查找 "src" 在文件路径中的位置
         size_t src_pos = file_path.find(project_src_path);

@@ -26,9 +26,12 @@ endif()
 # Automatically discover common source files (interfaces and core logic)
 file(GLOB MINIGIT_COMMON_SOURCES
     "src/infrastructure/config/*.cc"
-    "src/infrastructure/logging/logger.cc"  # Only include the interface
+    "src/infrastructure/logging/logger.cc"
     "src/infrastructure/concurrency/thread_pool_manager.cc"
     "src/presentation/lexer.cc"
+    "src/presentation/command_engine.cc"
+    "src/presentation/validator/*.cc"
+    "src/application/*.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})
@@ -164,3 +167,19 @@ target_link_libraries(
 )
 
 add_test(NAME lexer_test COMMAND lexer_test)
+
+# # Add command_engine_test executable
+# add_executable(
+#   command_engine_test
+#   tests/presentation/command_engine_test.cc
+# )
+
+# target_link_libraries(
+#   command_engine_test
+#   PRIVATE
+#   minigit
+#   gtest_main
+#   ${LOG4CPLUS_LIBRARY}
+# )
+
+# add_test(NAME command_engine_test COMMAND command_engine_test)

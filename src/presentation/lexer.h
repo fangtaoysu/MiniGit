@@ -11,7 +11,7 @@ namespace minigit::presentation {
  */
 class Lexer {
 public:
-    LexicalResult LexicalAnalyze(const std::string& command_str);
+    CommandContext LexicalAnalyze(const std::string& command_str);
 
 private:
     std::vector<std::string> Tokenize(const std::string& command_str);

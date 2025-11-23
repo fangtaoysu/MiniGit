@@ -5,9 +5,9 @@
 #include "infrastructure/logging/logger.h"
 
 namespace minigit::presentation {
-LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
+CommandContext Lexer::LexicalAnalyze(const std::string& command_str) {
     LOG_INFO("Lexical analyzing command: " << command_str);
-    LexicalResult result;
+    CommandContext result;
     std::vector<std::string> tokens = Tokenize(command_str);
 
     if (tokens.empty()) {
@@ -39,26 +39,26 @@ LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
         }
         switch (current_state) {
             case CmdState::COMMAND:
-                result.command = token;
+                result.cmd = token;
                 LOG_INFO("Parsed command: " << token);
                 // 设置下一个状态
                 next_state = CmdState::FILE_PATH;
                 break;
 
             case CmdState::OPTION:
-                result.option.push_back(token);
+                result.opts.push_back(token);
                 LOG_INFO("Parsed option: " << token);
                 next_state = CmdState::ARGUMENT;
                 break;
 
             case CmdState::ARGUMENT:
-                result.argument.push_back(token);
+                result.args.push_back(token);
                 LOG_INFO("Parsed argument: " << token);
                 next_state = CmdState::END;
                 break;
 
             case CmdState::FILE_PATH:
-                result.file_path.push_back(token);
+                result.file_paths.push_back(token);
                 LOG_INFO("Parsed file path: " << token);
                 next_state = CmdState::FILE_PATH;
                 break;

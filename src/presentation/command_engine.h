@@ -2,20 +2,23 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 
 #include "presentation/validator.h"
+#include "presentation/model.h"
+#include "application/cmd_executor.h"
 
 namespace minigit::presentation {
 class CommandEngine {
 public:
-    static void RegisterCommand(const std::string& command_name,
-                                std::unique_ptr<Validator> validator);
-    static void ValidateCommand(const LexicalResult& cmd);
-    // void ExecuteCommand();
-
+    void RegisterCommand(const std::string& command_name,
+                                std::unique_ptr<Validator> validator,
+                                std::unique_ptr<minigit::application::CmdExecutor> executor);
+    void Execute(const std::string& command_str);
+                                
 private:
-    static std::unordered_map<std::string, std::unique_ptr<Validator>>
-        validators_;
+    using CommandHandler = std::tuple<std::unique_ptr<Validator>, std::unique_ptr<minigit::application::CmdExecutor>>;
+    std::unordered_map<std::string, CommandHandler> command_registry_;
 };
 }  // namespace minigit::presentation

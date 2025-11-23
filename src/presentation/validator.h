@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "shared/model.h"
+#include "presentation/model.h"
 
 namespace minigit::presentation {
 /**
@@ -11,6 +11,6 @@ namespace minigit::presentation {
  */
 class Validator {
 public:
-    virtual bool Validate(const LexicalResult& cmd) = 0;
+    virtual bool Validate(const CommandContext& cmd_context) = 0;
 };
 }  // namespace minigit::presentation

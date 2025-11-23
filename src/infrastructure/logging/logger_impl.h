@@ -2,7 +2,7 @@
 
 #include "domain/interfaces/logger_interface.h"
 
-namespace icd::infrastructure::logging {
+namespace minigit::infrastructure::logging {
 
 class LoggerImpl : public domain::interfaces::ILogger {
 public:
@@ -10,4 +10,4 @@ public:
              const std::string &message) override;
 };
 
-}  // namespace icd::infrastructure::logging
+}  // namespace minigit::infrastructure::logging

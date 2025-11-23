@@ -2,7 +2,7 @@
 
 #include "infrastructure/logging/logger.h"
 
-namespace icd::infrastructure::logging {
+namespace minigit::infrastructure::logging {
 
 void LoggerImpl::Log(domain::interfaces::LogLevel level,
                      const std::string &message) {
@@ -22,4 +22,4 @@ void LoggerImpl::Log(domain::interfaces::LogLevel level,
     }
 }
 
-}  // namespace icd::infrastructure::logging
+}  // namespace minigit::infrastructure::logging

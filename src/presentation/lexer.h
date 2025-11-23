@@ -14,11 +14,5 @@ public:
 
 private:
     std::vector<std::string> Tokenize(const std::string& command_str);
-    enum class CmdState {
-        COMMAND,
-        OPTION,
-        ARGUMENT,
-        FILE_PATH,
-        END
-    };
+    enum class CmdState { COMMAND, OPTION, ARGUMENT, FILE_PATH, END };
 };

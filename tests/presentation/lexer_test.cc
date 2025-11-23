@@ -1,10 +1,15 @@
-#include <gtest/gtest.h>
-#include "src/infrastructure/logging/logger.h"
 #include "src/presentation/lexer.h"
+
+#include <gtest/gtest.h>
+
+#include "src/infrastructure/logging/logger.h"
 #include "src/shared/model.h"
+#include "infrastructure/config/app_config.h"
+
 
 // Helper function to compare two LexicalResult objects for equality.
-void AssertResultEqual(const LexicalResult& actual, const LexicalResult& expected) {
+void AssertResultEqual(const LexicalResult& actual,
+                       const LexicalResult& expected) {
     EXPECT_EQ(actual.command, expected.command);
     EXPECT_EQ(actual.option, expected.option);
     EXPECT_EQ(actual.argument, expected.argument);
@@ -55,6 +60,7 @@ TEST(LexerTest, HandlesAddWithMultipleFiles) {
     expected.file_path = {"src/main.cc", "include/app.h"};
 
     AssertResultEqual(actual, expected);
+
 }
 
 TEST(LexerTest, HandlesComplexCommitCommand) {
@@ -68,6 +74,7 @@ TEST(LexerTest, HandlesComplexCommitCommand) {
     expected.argument = {"new message"};
 
     AssertResultEqual(actual, expected);
+
 }
 
 TEST(LexerTest, HandlesCommandWithoutGitPrefix) {
@@ -79,6 +86,7 @@ TEST(LexerTest, HandlesCommandWithoutGitPrefix) {
     expected.command = "status";
 
     AssertResultEqual(actual, expected);
+
 }
 
 TEST(LexerTest, HandlesEmptyCommand) {
@@ -86,16 +94,25 @@ TEST(LexerTest, HandlesEmptyCommand) {
     std::string command_str = "";
     LexicalResult actual = lexer.LexicalAnalyze(command_str);
 
-    LexicalResult expected; // All fields should be empty
+    LexicalResult expected;  // All fields should be empty
 
     AssertResultEqual(actual, expected);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     // Initialize the logger
     std::filesystem::path log_config_path =
         PathUtils::GetProjectRoot() / "config" / "log4cplus.properties";
+
     InitImLogger(log_config_path.string());
+
+    std::filesystem::path app_config_path =
+        PathUtils::GetProjectRoot() / "config" / "config.json";
+    if (!AppConfig::GetInstance().LoadConfig(app_config_path)) {
+        LOG_FATAL("Failed to load application config. Exiting.");
+        return 1;
+    }
+
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

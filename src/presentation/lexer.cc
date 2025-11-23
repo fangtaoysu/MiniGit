@@ -1,4 +1,5 @@
 #include "presentation/lexer.h"
+
 #include <sstream>
 
 #include "infrastructure/logging/logger.h"
@@ -8,6 +9,10 @@ LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
     LexicalResult result;
     std::vector<std::string> tokens = Tokenize(command_str);
 
+    if (tokens.empty()) {
+        LOG_WARN("No tokens found in command: " << command_str);
+        return result;
+    }
     // 检查git并跳过git前缀
     auto it = tokens.begin();
     if (*it != "git") {
@@ -15,14 +20,15 @@ LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
         return result;
     }
     ++it;
-    
+
     CmdState current_state = CmdState::COMMAND;
     CmdState next_state = CmdState::OPTION;
-    while(it != tokens.end()) {
+    while (it != tokens.end()) {
         const std::string& token = *it;
 
         if (current_state == CmdState::END) {
-            LOG_WARN("Unexpected token after arguments and file paths: " << token);
+            LOG_WARN(
+                "Unexpected token after arguments and file paths: " << token);
             break;
         }
 
@@ -30,15 +36,14 @@ LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
         if (token.front() == '-') {
             current_state = CmdState::OPTION;
         }
-        switch (current_state)
-        {
+        switch (current_state) {
             case CmdState::COMMAND:
                 result.command = token;
                 LOG_INFO("Parsed command: " << token);
                 // 设置下一个状态
                 next_state = CmdState::FILE_PATH;
                 break;
-            
+
             case CmdState::OPTION:
                 result.option.push_back(token);
                 LOG_INFO("Parsed option: " << token);
@@ -56,7 +61,7 @@ LexicalResult Lexer::LexicalAnalyze(const std::string& command_str) {
                 LOG_INFO("Parsed file path: " << token);
                 next_state = CmdState::FILE_PATH;
                 break;
-            
+
             default:
                 break;
         }
@@ -71,13 +76,15 @@ std::vector<std::string> Lexer::Tokenize(const std::string& command_str) {
     std::vector<std::string> tokens;
     std::istringstream stream(command_str);
     std::string token;
-    
+
     while (stream >> token) {
         // 没有引号就按空格分隔
         if (token.find('"') == std::string::npos) {
             tokens.push_back(token);
         } else {
-            std::string quoted_token = token + stream.str().substr(static_cast<size_t>(stream.tellg()));
+            std::string quoted_token =
+                token +
+                stream.str().substr(static_cast<size_t>(stream.tellg()));
             // 移除引号
             if (quoted_token.front() == '"') {
                 quoted_token.erase(0, 1);

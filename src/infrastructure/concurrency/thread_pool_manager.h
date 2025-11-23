@@ -1,7 +1,8 @@
 #pragma once
 
+#include <functional>  // For std::bind
 #include <future>
-#include <functional> // For std::bind
+
 #include "third_party/BS_thread_pool.hpp"
 
 namespace infrastructure::concurrency {
@@ -17,14 +18,16 @@ namespace infrastructure::concurrency {
 class ThreadPoolManager {
 public:
     /**
-     * @brief Constructs the ThreadPoolManager and initializes the underlying thread pool.
-     * @param thread_count The number of threads to create in the pool. Defaults to the
-     *                     number of hardware threads if set to 0.
+     * @brief Constructs the ThreadPoolManager and initializes the underlying
+     * thread pool.
+     * @param thread_count The number of threads to create in the pool. Defaults
+     * to the number of hardware threads if set to 0.
      */
     explicit ThreadPoolManager(const size_t thread_count = 0);
 
     /**
-     * @brief Destructor. Waits for all submitted tasks to complete before shutting down.
+     * @brief Destructor. Waits for all submitted tasks to complete before
+     * shutting down.
      */
     ~ThreadPoolManager();
 
@@ -41,14 +44,17 @@ public:
      * @tparam Args The types of the arguments to pass to the function.
      * @param func The function/callable to execute.
      * @param args The arguments to pass to the function.
-     * @return A std::future that will hold the result of the function's execution.
+     * @return A std::future that will hold the result of the function's
+     * execution.
      */
     template <typename F, typename... Args>
-    auto SubmitTask(F&& func, Args&&... args) -> std::future<decltype(func(args...))> {
-        // The BS::thread_pool library expects a single callable object (a task).
-        // We use std::bind to bundle the function and its arguments together into
-        // a single callable that the thread pool can execute.
-        auto task = std::bind(std::forward<F>(func), std::forward<Args>(args)...);
+    auto SubmitTask(F&& func,
+                    Args&&... args) -> std::future<decltype(func(args...))> {
+        // The BS::thread_pool library expects a single callable object (a
+        // task). We use std::bind to bundle the function and its arguments
+        // together into a single callable that the thread pool can execute.
+        auto task =
+            std::bind(std::forward<F>(func), std::forward<Args>(args)...);
         return pool_.submit_task(std::move(task));
     }
 
@@ -56,4 +62,4 @@ private:
     BS::thread_pool<> pool_;
 };
 
-} // namespace infrastructure::concurrency
+}  // namespace infrastructure::concurrency

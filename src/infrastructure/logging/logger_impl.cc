@@ -2,13 +2,11 @@
 
 #include "infrastructure/logging/logger.h"
 
-namespace icd::infrastructure::logging
-{
+namespace icd::infrastructure::logging {
 
-void LoggerImpl::Log(domain::interfaces::LogLevel level, const std::string &message)
-{
-    switch (level)
-    {
+void LoggerImpl::Log(domain::interfaces::LogLevel level,
+                     const std::string &message) {
+    switch (level) {
         case domain::interfaces::LogLevel::Debug:
             LOG_DEBUG(message);
             break;

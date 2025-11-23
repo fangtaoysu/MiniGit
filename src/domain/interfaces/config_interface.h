@@ -1,13 +1,13 @@
 #pragma once
 
-#include <string>
 #include <optional>
+#include <string>
 
 namespace domain::interfaces {
 
 /**
  * @brief Defines the contract for accessing application configuration.
- * 
+ *
  * This interface provides an abstraction for retrieving configuration values,
  * allowing the domain layer to remain independent of the specific
  * configuration source (e.g., file, environment variables, etc.).
@@ -40,7 +40,8 @@ public:
      * @return An std::optional<std::string> containing the value if the key
      *         exists, or std::nullopt if it does not.
      */
-    virtual std::optional<std::string> GetConfigValue(const std::string& key) const = 0;
+    virtual std::optional<std::string> GetConfigValue(
+        const std::string& key) const = 0;
 };
 
-} // namespace domain::interfaces
+}  // namespace domain::interfaces

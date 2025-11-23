@@ -11,12 +11,8 @@ DbConnectionGuard::~DbConnectionGuard() {
     }
 }
 
-sql::Connection* DbConnectionGuard::operator->() const {
-    return connection_;
-}
+sql::Connection* DbConnectionGuard::operator->() const { return connection_; }
 
-sql::Connection* DbConnectionGuard::get() const {
-    return connection_;
-}
+sql::Connection* DbConnectionGuard::get() const { return connection_; }
 
-} // namespace infrastructure::database
+}  // namespace infrastructure::database

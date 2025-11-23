@@ -7,3 +7,4 @@ MiniGit.db
 */build/
 logs/
 .VSCodeCounter/
+.cache/

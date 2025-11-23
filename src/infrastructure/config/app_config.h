@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
-#include <nlohmann/json.hpp>
 #include <filesystem>
+#include <nlohmann/json.hpp>
+#include <string>
 
 #include "shared/model.h"
-
 
 // 用于管理所有应用配置的单例类
 class AppConfig {
@@ -20,12 +19,15 @@ public:
     // 获取配置结构体的 const 引用
     const LoggingSettings& GetLoggingSettings() const { return logging_; }
     const MySqlSettings& GetMySqlSettings() const { return mysql_; }
-    const ThreadPoolSettings& GetThreadPoolSettings() const { return thread_pool_; }
+    const ThreadPoolSettings& GetThreadPoolSettings() const {
+        return thread_pool_;
+    }
 
     AppConfig() = default;
     ~AppConfig() = default;
 
-    // Deleting copy/move constructors and assignment operators to prevent duplication.
+    // Deleting copy/move constructors and assignment operators to prevent
+    // duplication.
     AppConfig(const AppConfig&) = delete;
     AppConfig& operator=(const AppConfig&) = delete;
     AppConfig(AppConfig&&) = delete;
@@ -36,5 +38,4 @@ private:
     MySqlSettings mysql_{};
     LoggingSettings logging_{"info"};
     ThreadPoolSettings thread_pool_{4};
-
 };

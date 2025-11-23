@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iostream>
 
-
 AppConfig& AppConfig::GetInstance() {
     static AppConfig instance;
     return instance;

@@ -1,8 +1,10 @@
-#include <gtest/gtest.h>
 #include "infrastructure/concurrency/thread_pool_manager.h"
+
+#include <gtest/gtest.h>
+
+#include <atomic>
 #include <chrono>
 #include <thread>
-#include <atomic>
 #include <vector>
 
 using namespace infrastructure::concurrency;
@@ -13,13 +15,11 @@ class ThreadPoolManagerTest : public ::testing::Test {};
 // 测试点 1: 基本构造与析构
 // 验证线程池可以被成功创建（使用指定线程数或默认线程数）和销毁，而不会引发异常。
 TEST_F(ThreadPoolManagerTest, ShouldConstructAndDestructWithoutErrors) {
-    ASSERT_NO_THROW({
-        ThreadPoolManager pool(4);
-    }) << "Construction with a specific thread count failed.";
+    ASSERT_NO_THROW({ ThreadPoolManager pool(4); })
+        << "Construction with a specific thread count failed.";
 
-    ASSERT_NO_THROW({
-        ThreadPoolManager pool;
-    }) << "Default construction failed.";
+    ASSERT_NO_THROW({ ThreadPoolManager pool; })
+        << "Default construction failed.";
 }
 
 // 测试点 2: 提交带返回值的任务
@@ -38,13 +38,12 @@ TEST_F(ThreadPoolManagerTest, ShouldExecuteVoidTask) {
     std::promise<void> task_ran_promise;
     std::future<void> task_ran_future = task_ran_promise.get_future();
 
-    pool.SubmitTask([&task_ran_promise]() {
-        task_ran_promise.set_value();
-    });
+    pool.SubmitTask([&task_ran_promise]() { task_ran_promise.set_value(); });
 
     // 等待任务发出完成信号，设置一个超时时间以防万一。
     auto status = task_ran_future.wait_for(std::chrono::seconds(1));
-    ASSERT_EQ(status, std::future_status::ready) << "Void task did not complete within the timeout.";
+    ASSERT_EQ(status, std::future_status::ready)
+        << "Void task did not complete within the timeout.";
 }
 
 // 测试点 4: 并发处理多个任务
@@ -75,10 +74,11 @@ TEST_F(ThreadPoolManagerTest, ShouldHandleMultipleConcurrentTasks) {
 }
 
 // 测试点 5: 优雅停机 (Graceful Shutdown)
-// 验证当 ThreadPoolManager 对象被销毁时，它会等待所有正在运行的任务完成后再退出。
+// 验证当 ThreadPoolManager
+// 对象被销毁时，它会等待所有正在运行的任务完成后再退出。
 TEST_F(ThreadPoolManagerTest, ShouldWaitForTasksToCompleteOnDestruction) {
     std::atomic<bool> long_task_completed = false;
-    
+
     {
         ThreadPoolManager pool(1);
         // 提交一个耗时较长的任务
@@ -99,20 +99,20 @@ TEST_F(ThreadPoolManagerTest, ShouldForwardArgumentsCorrectlyToTasks) {
     ThreadPoolManager pool(1);
 
     // 验证基本类型的值传递
-    auto future_sum = pool.SubmitTask([](int a, int b) { return a + b; }, 10, 20);
+    auto future_sum =
+        pool.SubmitTask([](int a, int b) { return a + b; }, 10, 20);
     ASSERT_EQ(future_sum.get(), 30);
 
     // 验证字符串和常量引用传递
     auto future_concat = pool.SubmitTask(
-        [](const std::string& a, const std::string& b) { return a + b; }, 
-        "hello", 
-        " world"
-    );
+        [](const std::string& a, const std::string& b) { return a + b; },
+        "hello", " world");
     ASSERT_EQ(future_concat.get(), "hello world");
 
     // 验证通过 std::ref 传递引用，并修改外部变量
     int value_to_modify = 10;
-    auto future_modify = pool.SubmitTask([](int& x) { x = 100; }, std::ref(value_to_modify));
+    auto future_modify =
+        pool.SubmitTask([](int& x) { x = 100; }, std::ref(value_to_modify));
     future_modify.get();
     ASSERT_EQ(value_to_modify, 100);
 }

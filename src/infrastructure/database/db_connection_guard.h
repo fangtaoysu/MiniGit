@@ -31,4 +31,4 @@ private:
     sql::Connection* connection_;
 };
 
-} // namespace infrastructure::database
+}  // namespace infrastructure::database

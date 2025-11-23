@@ -1,14 +1,18 @@
 #include <gtest/gtest.h>
-#include "infrastructure/config/app_config.h"
-#include <fstream>
-#include <filesystem>
 
-// Test fixture for AppConfig tests to handle temporary file creation and cleanup.
+#include <filesystem>
+#include <fstream>
+
+#include "infrastructure/config/app_config.h"
+
+// Test fixture for AppConfig tests to handle temporary file creation and
+// cleanup.
 class AppConfigTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Create a unique temporary file path for each test.
-        temp_config_path_ = std::filesystem::temp_directory_path() / "test_config.json";
+        temp_config_path_ =
+            std::filesystem::temp_directory_path() / "test_config.json";
     }
 
     void TearDown() override {
@@ -84,18 +88,18 @@ TEST_F(AppConfigTest, HandlesPartialConfigWithDefaults) {
 
     const auto& db = config.GetMySqlSettings();
     EXPECT_TRUE(db.enable);
-    EXPECT_EQ(db.host, "127.0.0.1"); 
-    EXPECT_EQ(db.port, 3306);         
+    EXPECT_EQ(db.host, "127.0.0.1");
+    EXPECT_EQ(db.port, 3306);
     EXPECT_EQ(db.user, "partial_user");
-    EXPECT_EQ(db.password, "");       
+    EXPECT_EQ(db.password, "");
     EXPECT_EQ(db.db_name, "partial_db");
-    EXPECT_EQ(db.pool_size, 4);       
+    EXPECT_EQ(db.pool_size, 4);
 
     const auto& pool = config.GetThreadPoolSettings();
-    EXPECT_EQ(pool.size, 4); 
+    EXPECT_EQ(pool.size, 4);
 
     const auto& log = config.GetLoggingSettings();
-    EXPECT_EQ(log.level, "info"); 
+    EXPECT_EQ(log.level, "info");
 }
 
 TEST_F(AppConfigTest, HandlesMissingFile) {
@@ -110,7 +114,7 @@ TEST_F(AppConfigTest, HandlesInvalidJson) {
         "mysql": {
             "enable": true,
     }
-    )"; // Malformed JSON
+    )";  // Malformed JSON
     WriteConfigFile(invalid_json);
 
     AppConfig config;

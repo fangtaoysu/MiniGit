@@ -1,13 +1,15 @@
 #pragma once
 
-#include <queue>
-#include <mutex>
+#include <cppconn/connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+
 #include <condition_variable>
 #include <memory>
+#include <mutex>
+#include <queue>
 #include <string>
-#include <cppconn/driver.h>
-#include <cppconn/connection.h>
-#include <cppconn/exception.h>
+
 #include "infrastructure/config/app_config.h"
 
 namespace infrastructure::database {
@@ -32,15 +34,15 @@ private:
     std::queue<sql::Connection*> pool_;
     std::mutex mutex_;
     std::condition_variable cond_;
-    
+
     std::string host_;
     std::string user_;
     std::string password_;
     std::string db_name_;
     unsigned int port_;
     unsigned int pool_size_;
-    
+
     sql::Driver* driver_;
 };
 
-} // namespace infrastructure::database
+}  // namespace infrastructure::database

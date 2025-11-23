@@ -4,12 +4,9 @@
 
 #include "infrastructure/logging/logger.h"
 
-
 namespace infrastructure::database {
 
-DbConnectionPool::~DbConnectionPool() {
-    CloseAllConnections();
-}
+DbConnectionPool::~DbConnectionPool() { CloseAllConnections(); }
 
 bool DbConnectionPool::Init(const MySqlSettings& db_config) {
     if (!db_config.enable) {
@@ -36,7 +33,10 @@ bool DbConnectionPool::Init(const MySqlSettings& db_config) {
                 return false;
             }
         }
-        LOG_INFO("Database connection pool initialized successfully with {} connections." << pool_.size());
+        LOG_INFO(
+            "Database connection pool initialized successfully with {} "
+            "connections."
+            << pool_.size());
         return true;
     } catch (const sql::SQLException& e) {
         std::stringstream error_msg;
@@ -97,4 +97,4 @@ sql::Connection* DbConnectionPool::CreateConnection() {
     }
 }
 
-} // namespace infrastructure::database
+}  // namespace infrastructure::database

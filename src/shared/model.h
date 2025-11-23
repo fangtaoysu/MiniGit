@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-
 struct LoggingSettings {
     std::string level{"info"};
 };

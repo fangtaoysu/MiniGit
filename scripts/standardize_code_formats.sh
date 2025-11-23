@@ -73,7 +73,11 @@ fi
 
 for f in "${FILES[@]}"; do
   if [ "$CHECK" -eq 1 ]; then
-    if ! clang-format --dry-run --Werror -style=Google "$f" 2>/dev/null; then
+    if ! clang-format --dry-run --Werror -style='{
+        BasedOnStyle: Google,
+        AccessModifierOffset: -4,
+        IndentWidth: 4
+      }' "$f" 2>/dev/null; then
       [ "$VERBOSE" -eq 1 ] && echo "NEEDS FORMATTING: $f"
       needs=$((needs+1))
     else
@@ -82,7 +86,11 @@ for f in "${FILES[@]}"; do
     fi
   else
     [ "$VERBOSE" -eq 1 ] && echo "Formatting: $f"
-    if clang-format -i -style=Google "$f" 2>/dev/null; then
+    if clang-format -i -style='{
+          BasedOnStyle: Google,
+          AccessModifierOffset: -4,
+          IndentWidth: 4
+      }' "$f" 2>/dev/null; then
       success=$((success+1))
     else
       failure=$((failure+1))

@@ -51,6 +51,13 @@ if(USE_MYSQL)
   )
   target_sources(minigit PRIVATE ${MINIGIT_DB_SOURCES})
 endif()
+
+# Domain core sources (hashing and tree)
+target_sources(minigit PRIVATE
+  src/domain/core/hash_util.cc
+  src/domain/core/tree.cc
+)
+
 target_include_directories(minigit PUBLIC 
     src
     ${CMAKE_SOURCE_DIR}
@@ -75,6 +82,9 @@ target_include_directories(minigit PUBLIC
 if(USE_MYSQL)
   target_link_libraries(minigit PUBLIC ${MYSQLCPPCONN_LIBRARY})
 endif()
+# Link OpenSSL for hashing
+find_package(OpenSSL REQUIRED)
+target_link_libraries(minigit PUBLIC OpenSSL::Crypto)
 
 add_executable(minigit_app src/main.cpp)
 if(USE_MYSQL)
@@ -183,3 +193,70 @@ target_link_libraries(
 )
 
 add_test(NAME command_engine_test COMMAND command_engine_test)
+
+# Add blob_test executable
+find_package(OpenSSL REQUIRED)
+
+# 添加调试信息
+message(STATUS "OpenSSL include directories: ${OPENSSL_INCLUDE_DIR}")
+message(STATUS "OpenSSL libraries: ${OPENSSL_LIBRARIES}")
+message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
+
+add_executable(
+  blob_test
+  tests/domain/core/blob_test.cc
+  src/domain/core/blob.cc
+)
+
+target_link_libraries(
+  blob_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+  OpenSSL::SSL
+  OpenSSL::Crypto
+)
+
+# 如果需要，手动设置包含目录
+if(OPENSSL_INCLUDE_DIR)
+  target_include_directories(
+    blob_test
+    PRIVATE
+    ${OPENSSL_INCLUDE_DIR}
+  )
+endif()
+
+# commit_test executable
+add_executable(
+  commit_test
+  tests/domain/core/commit_test.cc
+  src/domain/core/commit.cc
+)
+
+target_link_libraries(
+  commit_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+  OpenSSL::SSL
+  OpenSSL::Crypto
+)
+
+# tree_test executable
+add_executable(
+  tree_test
+  tests/domain/core/tree_test.cc
+  src/domain/core/tree.cc
+)
+
+target_link_libraries(
+  tree_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+  OpenSSL::SSL
+  OpenSSL::Crypto
+)

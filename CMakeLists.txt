@@ -32,6 +32,7 @@ file(GLOB MINIGIT_COMMON_SOURCES
     "src/presentation/command_engine.cc"
     "src/presentation/validator/*.cc"
     "src/application/*.cc"
+    "src/application/init/init_executor.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})

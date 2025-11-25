@@ -71,7 +71,7 @@ void Run() {
     // 注册若干命令
     command_engine.RegisterCommand(
         "init", std::make_unique<cmd_validator::InitValidator>(),
-        std::make_unique<cmd_executor::InitExecutor>());
+        std::make_unique<InitExecutor>());
 
     // 开始循环
     std::string line("");

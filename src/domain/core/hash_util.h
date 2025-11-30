@@ -3,7 +3,7 @@
 #include <string>
 #include <span>
 
-namespace domain::core {
+namespace minigit::domain::core {
 class HashUtil {
 public:
     static std::string Sha1Hex(const std::string& header,

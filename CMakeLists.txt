@@ -32,7 +32,7 @@ file(GLOB MINIGIT_COMMON_SOURCES
     "src/presentation/command_engine.cc"
     "src/presentation/validator/*.cc"
     "src/application/*.cc"
-    "src/application/init/init_executor.cc"
+    "src/application/init/*.cc"
 )
 
 add_library(minigit ${MINIGIT_COMMON_SOURCES})
@@ -49,13 +49,19 @@ if(USE_MYSQL)
     "src/infrastructure/database/connection_pool.cc"
     "src/infrastructure/database/db_connection_guard.cc"
     "src/infrastructure/database/database_manager.cc"
+    "src/infrastructure/database/mysql_repository_initializer.cc"
+    "src/infrastructure/database/mysql_object_repository.cc"
+    "src/infrastructure/database/mysql_reference_repository.cc"
+    "src/infrastructure/database/mysql_index_repository.cc"
   )
   target_sources(minigit PRIVATE ${MINIGIT_DB_SOURCES})
 endif()
 
-# Domain core sources (hashing and tree)
+# Domain core sources (hashing, blob, commit, and tree)
 target_sources(minigit PRIVATE
   src/domain/core/hash_util.cc
+  src/domain/core/blob.cc
+  src/domain/core/commit.cc
   src/domain/core/tree.cc
 )
 
@@ -195,6 +201,30 @@ target_link_libraries(
 
 add_test(NAME command_engine_test COMMAND command_engine_test)
 
+# Add init_command_test executable
+add_executable(
+  init_command_test
+  tests/presentation/init_command_test.cc
+)
+
+target_link_libraries(
+  init_command_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
+
+if(USE_MYSQL)
+  target_link_libraries(
+    init_command_test
+    PRIVATE
+    ${MYSQLCPPCONN_LIBRARY}
+  )
+endif()
+
+add_test(NAME init_command_test COMMAND init_command_test)
+
 # Add blob_test executable
 find_package(OpenSSL REQUIRED)
 
@@ -260,4 +290,18 @@ target_link_libraries(
   ${LOG4CPLUS_LIBRARY}
   OpenSSL::SSL
   OpenSSL::Crypto
+)
+
+# Add init_test executable
+add_executable(
+  init_test
+  tests/presentation/init_command_test.cc
+)
+
+target_link_libraries(
+  init_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
 )

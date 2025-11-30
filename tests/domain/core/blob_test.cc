@@ -4,7 +4,7 @@
 
 #include "domain/core/blob.h"
 
-using namespace domain::core;
+using namespace minigit::domain::core;
 
 class DomainCoreBlobTest : public ::testing::Test {
 protected:

@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace domain::core {
+namespace minigit::domain::core {
 
 Commit::Commit(const CommitMetadata& metadata)
     : meta_data_(metadata) {

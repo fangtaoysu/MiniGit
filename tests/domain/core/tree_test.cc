@@ -22,7 +22,7 @@ std::vector<uint8_t> ToBytes(const std::string& s) {
 }
 }
 
-namespace domain::core {
+using namespace minigit::domain::core;
 
 TEST(TreeTest, DeserializeComputesExpectedSha1) {
     std::string ser;
@@ -84,5 +84,3 @@ TEST(TreeTest, CalculateSha1ConsistencyWithDeserialize) {
     auto des = Tree::Deserialize(std::span<const uint8_t>(ToBytes(ser)));
     EXPECT_EQ(calc, des);
 }
-
-} // namespace domain::core

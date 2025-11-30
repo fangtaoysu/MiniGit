@@ -1,7 +1,7 @@
 #include "domain/core/tree.h"
 #include <openssl/sha.h>
 
-namespace domain::core {
+namespace minigit::domain::core {
 
 Tree::Tree(std::vector<TreeEntry> entries)
     : obj_type_("tree"), entries_(std::move(entries)) {
@@ -36,6 +36,10 @@ std::string Tree::CalculateSha1() const {
         out[2 * i + 1] = kHex[hash[i] & 0xF];
     }
     return out;
+}
+
+std::string Tree::GetSha1() const {
+    return sha1_;
 }
 
 std::string Tree::Deserialize(std::span<const uint8_t> data) {

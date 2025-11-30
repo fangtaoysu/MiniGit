@@ -10,7 +10,7 @@ std::vector<uint8_t> ToBytes(const std::string& s) {
 }
 }
 
-namespace domain::core {
+using namespace minigit::domain::core;
 
 TEST(CommitTest, DeserializeParsesFields) {
     std::string text =
@@ -88,5 +88,3 @@ TEST(CommitTest, MessageTrailingNewlineBehavior) {
     auto c2b = Commit::Deserialize(std::span<const uint8_t>(s2));
     EXPECT_EQ(c2b.GetMessage(), "No newline\n");
 }
-
-} // namespace domain::core

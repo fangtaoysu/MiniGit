@@ -7,7 +7,7 @@
 #include <cstdint>
 
 
-namespace domain::core {
+namespace minigit::domain::core {
 
 struct TreeEntry {
     std::string mode;
@@ -34,6 +34,7 @@ public:
                   const std::string& name) const;
 
     std::string CalculateSha1() const;
+    std::string GetSha1() const;
     static std::string Deserialize(std::span<const uint8_t> data);
     std::vector<uint8_t> Serialize() const;
 

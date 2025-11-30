@@ -19,6 +19,8 @@ namespace logging = minigit::infrastructure::logging;
 namespace utils = minigit::shared;
 namespace cmd_validator = minigit::presentation::validator;
 namespace cmd_executor = minigit::application;
+using InitExecutor = minigit::application::init::InitExecutor;
+using DependencyConfig = minigit::application::init::DependencyConfig;
 
 void Init() {
     // 1. 初始化日志记录器
@@ -71,7 +73,7 @@ void Run() {
     // 注册若干命令
     command_engine.RegisterCommand(
         "init", std::make_unique<cmd_validator::InitValidator>(),
-        std::make_unique<InitExecutor>());
+        std::make_unique<InitExecutor>(DependencyConfig::CreateInitService()));
 
     // 开始循环
     std::string line("");

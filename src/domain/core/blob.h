@@ -5,7 +5,7 @@
 #include <array>
 #include <string>
 
-namespace domain::core {
+namespace minigit::domain::core {
 /**
  * Blob 对象：表示文件的原始内容（不含文件名和路径）。
  * - 负责计算并暴露内容的 SHA-1 哈希
@@ -20,6 +20,7 @@ public:
     }
 
     std::string CalculateSha1();
+    std::string GetSha1() const;
     std::span<const uint8_t> Serialize() const;
 
     /**

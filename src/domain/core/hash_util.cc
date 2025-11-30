@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace domain::core {
+namespace minigit::domain::core {
 std::string HashUtil::Sha1Hex(const std::string& header,
                               std::span<const uint8_t> data) {
     unsigned char digest[SHA_DIGEST_LENGTH];

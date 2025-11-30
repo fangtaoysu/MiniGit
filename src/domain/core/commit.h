@@ -7,7 +7,7 @@
 #include <cstdint>
 
 
-namespace domain::core {
+namespace minigit::domain::core {
 
 struct CommitMetadata {
     std::string tree_sha1;

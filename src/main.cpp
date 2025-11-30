@@ -2,6 +2,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 
 #include "application/cmd_impl.h"
 #include "infrastructure/concurrency/thread_pool_manager.h"
@@ -20,7 +22,6 @@ namespace utils = minigit::shared;
 namespace cmd_validator = minigit::presentation::validator;
 namespace cmd_executor = minigit::application;
 using InitExecutor = minigit::application::init::InitExecutor;
-using DependencyConfig = minigit::application::init::DependencyConfig;
 
 void Init() {
     // 1. 初始化日志记录器
@@ -73,7 +74,7 @@ void Run() {
     // 注册若干命令
     command_engine.RegisterCommand(
         "init", std::make_unique<cmd_validator::InitValidator>(),
-        std::make_unique<InitExecutor>(DependencyConfig::CreateInitService()));
+        std::make_unique<InitExecutor>());
 
     // 开始循环
     std::string line("");

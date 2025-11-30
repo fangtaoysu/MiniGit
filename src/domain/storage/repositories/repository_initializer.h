@@ -5,7 +5,7 @@
 namespace minigit::domain::storage::repositories {
 
 /**
- * @brief Repository初始化接口
+ * @brief Repository初始化
  * 负责初始化数据库表结构，确保仓库可以正常使用
  */
 class RepositoryInitializer {

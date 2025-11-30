@@ -2,19 +2,19 @@
 
 
 #include <memory>
+#include <filesystem>
 
 #include "application/cmd_executor.h"
-#include "application/init/init_service.h"
 
 namespace minigit::application::init {
 class InitExecutor : public minigit::application::CmdExecutor {
 public:
-    explicit InitExecutor(std::shared_ptr<InitService> init_service);
     bool Execute(const CommandContext& cmd_context) override;
 
 private:
-    std::shared_ptr<InitService> init_service_;
-
+    void InitRepo();
+    void CreateRepoDir(const std::filesystem::path& dir_path);
+    void CreateRepoFiles();
 };
 
 }  // namespace minigit::application::init

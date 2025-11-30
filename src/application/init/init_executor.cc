@@ -1,52 +1,70 @@
 #include "application/init/init_executor.h"
 
-#include <filesystem>
 #include <iostream>
+#include <fstream>
 
 #include "infrastructure/logging/logger.h"
+#include "shared/path_utils.h"
+
 
 namespace minigit::application::init {
 
-InitExecutor::InitExecutor(std::shared_ptr<InitService> init_service)
-    : init_service_(std::move(init_service)) {
+bool InitExecutor::Execute(const CommandContext& cmd_context) {
+    // 1. 创建对应文件
+    InitRepo();
+    CreateRepoFiles();
+    LOG_INFO("Repository files created successfully");
+
+    // 2. 创建对应数据库表
+    return true;
 }
 
-bool InitExecutor::Execute(const CommandContext& cmd_context) {
-    LOG_INFO("Executing git init command");
-    
-    // 获取仓库路径（从args或file_paths，默认为当前目录）
-    std::string repo_path = ".";
-    if (!cmd_context.args.empty()) {
-        repo_path = cmd_context.args[0];
-    } else if (!cmd_context.file_paths.empty()) {
-        repo_path = cmd_context.file_paths[0];
+void InitExecutor::InitRepo() {
+    std::filesystem::path repo = minigit::shared::GetProjectRoot() / "build" / ".mgit";
+    CreateRepoDir(repo);
+
+    // 创建目录
+    std::filesystem::path branches = repo / "branches";
+    std::filesystem::path hooks = repo / "hooks";
+    std::filesystem::path info = repo / "info";
+    std::filesystem::path objects = repo / "objects";
+    std::filesystem::path refs = repo / "refs";
+
+    CreateRepoDir(branches);
+    CreateRepoDir(hooks);
+    CreateRepoDir(info);
+    CreateRepoDir(objects);
+    CreateRepoDir(refs);
+}
+
+void InitExecutor::CreateRepoDir(const std::filesystem::path& dir_path) {
+    if (!std::filesystem::exists(dir_path)) {
+        std::filesystem::create_directories(dir_path);
+        LOG_INFO("Created repository directory: " << dir_path.string());
     }
+}
+
+void InitExecutor::CreateRepoFiles() {
+    std::filesystem::path repo = minigit::shared::GetProjectRoot() / "build" / ".mgit";
+    std::filesystem::path HEAD_path = repo / "HEAD";
+    std::filesystem::path config = repo / "config";
+    std::filesystem::path description = repo / "description";
     
-    // 获取默认分支名（从opts中解析，如 --initial-branch=main）
-    std::string default_branch = "main";
-    for (const auto& opt : cmd_context.opts) {
-        if (opt.find("--initial-branch=") == 0) {
-            default_branch = opt.substr(17); // 跳过 "--initial-branch="
-            break;
-        } else if (opt == "-b" && !cmd_context.args.empty()) {
-            // 处理 -b branch_name 格式
-            default_branch = cmd_context.args[0];
-            break;
-        }
-    }
-    
-    // 调用InitService执行初始化
-    bool success = init_service_->InitializeRepository(repo_path, default_branch);
-    
-    if (success) {
-        LOG_INFO("Repository initialized successfully at: " << repo_path);
-        std::cout << "Initialized empty Git repository in " 
-                  << std::filesystem::absolute(repo_path) << std::endl;
-    } else {
-        LOG_ERROR("Failed to initialize repository at: " << repo_path);
-    }
-    
-    return success;
+    std::ofstream HEAD_file(HEAD_path);
+    HEAD_file << "ref: refs/heads/main\n";
+    HEAD_file.close();
+
+    std::ofstream config_file(config);
+    config_file << "[core]\n";
+    config_file << "\trepositoryformatversion = 0\n";
+    config_file << "\tfilemode = true\n";
+    config_file << "\tbare = false\n";
+    config_file << "\tlogallrefupdates = true\n";
+    config_file.close();
+
+    std::ofstream description_file(description);
+    description_file << "Unnamed repository; edit this file 'description' to name the repository.\n";
+    description_file.close();
 }
 
 } // namespace minigit::application::init

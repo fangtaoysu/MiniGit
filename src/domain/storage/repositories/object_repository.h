@@ -11,19 +11,17 @@
 namespace minigit::domain::storage::repositories {
 
 class ObjectRepository {
-public:
-    virtual ~ObjectRepository() = default;
+public:    
+    bool StoreBlob(const minigit::domain::core::Blob& blob);
+    bool StoreCommit(const minigit::domain::core::Commit& commit);
+    bool StoreTree(const minigit::domain::core::Tree& tree);
     
-    virtual bool StoreBlob(const minigit::domain::core::Blob& blob) = 0;
-    virtual bool StoreCommit(const minigit::domain::core::Commit& commit) = 0;
-    virtual bool StoreTree(const minigit::domain::core::Tree& tree) = 0;
+    std::unique_ptr<minigit::domain::core::Blob> LoadBlob(const std::string& sha1);
+    std::unique_ptr<minigit::domain::core::Commit> LoadCommit(const std::string& sha1);
+    std::unique_ptr<minigit::domain::core::Tree> LoadTree(const std::string& sha1);
     
-    virtual std::unique_ptr<minigit::domain::core::Blob> LoadBlob(const std::string& sha1) = 0;
-    virtual std::unique_ptr<minigit::domain::core::Commit> LoadCommit(const std::string& sha1) = 0;
-    virtual std::unique_ptr<minigit::domain::core::Tree> LoadTree(const std::string& sha1) = 0;
-    
-    virtual bool Exists(const std::string& sha1) = 0;
-    virtual std::vector<std::string> GetAllObjectHashes() = 0;
+    bool Exists(const std::string& sha1);
+    std::vector<std::string> GetAllObjectHashes();
 };
 
 }  // namespace minigit::domain::storage::repositories

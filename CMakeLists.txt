@@ -49,10 +49,6 @@ if(USE_MYSQL)
     "src/infrastructure/database/connection_pool.cc"
     "src/infrastructure/database/db_connection_guard.cc"
     "src/infrastructure/database/database_manager.cc"
-    "src/infrastructure/database/mysql_repository_initializer.cc"
-    "src/infrastructure/database/mysql_object_repository.cc"
-    "src/infrastructure/database/mysql_reference_repository.cc"
-    "src/infrastructure/database/mysql_index_repository.cc"
   )
   target_sources(minigit PRIVATE ${MINIGIT_DB_SOURCES})
 endif()

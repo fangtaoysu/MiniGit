@@ -4,7 +4,7 @@
 #include <vector>
 #include <chrono>
 
-namespace domain::storage {
+namespace minigit::domain::storage {
 
 struct GitObjectEntity {
     std::string sha1;

@@ -301,3 +301,46 @@ target_link_libraries(
   gtest_main
   ${LOG4CPLUS_LIBRARY}
 )
+
+# add storage test
+add_executable(
+  index_test
+  src/domain/storage/repositories/index_repository.cc
+  tests/domain/storage/index_test.cc
+)
+
+target_link_libraries(
+  index_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
+
+add_executable(
+  object_test
+  src/domain/storage/repositories/object_repository.cc
+  tests/domain/storage/object_test.cc
+)
+
+target_link_libraries(
+  object_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)
+
+add_executable(
+  reference_test
+  src/domain/storage/repositories/reference_repository.cc
+  tests/domain/storage/reference_test.cc
+)
+
+target_link_libraries(
+  reference_test
+  PRIVATE
+  minigit
+  gtest_main
+  ${LOG4CPLUS_LIBRARY}
+)

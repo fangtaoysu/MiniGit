@@ -1,20 +1,18 @@
 #include "domain/core/blob.h"
 
-
-#include "infrastructure/logging/logger.h"
-
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+
 #include "domain/core/hash_util.h"
+#include "infrastructure/logging/logger.h"
 
 namespace minigit::domain::core {
 std::string Blob::CalculateSha1() {
-    return HashUtil::Sha1Hex(header_, std::span<const uint8_t>(data_.data(), data_.size()));
+    return HashUtil::Sha1Hex(
+        header_, std::span<const uint8_t>(data_.data(), data_.size()));
 }
 
-std::string Blob::GetSha1() const {
-    return sha1_;
-}
+std::string Blob::GetSha1() const { return sha1_; }
 
 std::span<const uint8_t> Blob::Serialize() const {
     return std::span<const uint8_t>(data_.data(), data_.size());
@@ -41,5 +39,4 @@ Blob Blob::CreateFromFile(const std::string& file_path) {
     return Blob(file_data);
 }
 
-
-} // namespace domain::core
+}  // namespace minigit::domain::core

@@ -1,11 +1,10 @@
 #pragma once
 
+#include <chrono>
+#include <cstdint>
+#include <span>
 #include <string>
 #include <vector>
-#include <chrono>
-#include <span>
-#include <cstdint>
-
 
 namespace minigit::domain::core {
 
@@ -46,4 +45,4 @@ private:
     std::string sha1_;
 };
 
-}  // namespace domain::core
+}  // namespace minigit::domain::core

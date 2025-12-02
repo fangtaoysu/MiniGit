@@ -11,6 +11,7 @@ namespace minigit::presentation {
  */
 class Validator {
 public:
+    virtual ~Validator() = default;
     virtual bool Validate(const CommandContext& cmd_context) = 0;
 };
 }  // namespace minigit::presentation

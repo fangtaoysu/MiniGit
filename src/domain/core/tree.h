@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include <cstdint>
 #include <optional>
 #include <span>
-#include <cstdint>
-
+#include <string>
+#include <vector>
 
 namespace minigit::domain::core {
 
@@ -28,22 +27,18 @@ public:
     explicit Tree(std::vector<TreeEntry> entries);
 
     // 添加条目返回新对象（函数式风格）
-    Tree AddEntry(const std::string& mode,
-                  const std::string& obj_type, 
-                  const std::string& sha1,
-                  const std::string& name) const;
+    Tree AddEntry(const std::string& mode, const std::string& obj_type,
+                  const std::string& sha1, const std::string& name) const;
 
     std::string CalculateSha1() const;
     std::string GetSha1() const;
     static std::string Deserialize(std::span<const uint8_t> data);
     std::vector<uint8_t> Serialize() const;
 
-
 private:
-    
     std::string obj_type_;
     std::string sha1_;
     std::vector<TreeEntry> entries_;
 };
 
-} // namespace domain::core
+}  // namespace minigit::domain::core

@@ -1,11 +1,10 @@
 #include "application/init/init_executor.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include "infrastructure/logging/logger.h"
 #include "shared/path_utils.h"
-
 
 namespace minigit::application::init {
 
@@ -20,7 +19,8 @@ bool InitExecutor::Execute(const CommandContext& cmd_context) {
 }
 
 void InitExecutor::InitRepo() {
-    std::filesystem::path repo = minigit::shared::GetProjectRoot() / "build" / ".mgit";
+    std::filesystem::path repo =
+        minigit::shared::GetProjectRoot() / "build" / ".mgit";
     CreateRepoDir(repo);
 
     // 创建目录
@@ -45,11 +45,12 @@ void InitExecutor::CreateRepoDir(const std::filesystem::path& dir_path) {
 }
 
 void InitExecutor::CreateRepoFiles() {
-    std::filesystem::path repo = minigit::shared::GetProjectRoot() / "build" / ".mgit";
+    std::filesystem::path repo =
+        minigit::shared::GetProjectRoot() / "build" / ".mgit";
     std::filesystem::path HEAD_path = repo / "HEAD";
     std::filesystem::path config = repo / "config";
     std::filesystem::path description = repo / "description";
-    
+
     std::ofstream HEAD_file(HEAD_path);
     HEAD_file << "ref: refs/heads/main\n";
     HEAD_file.close();
@@ -63,8 +64,9 @@ void InitExecutor::CreateRepoFiles() {
     config_file.close();
 
     std::ofstream description_file(description);
-    description_file << "Unnamed repository; edit this file 'description' to name the repository.\n";
+    description_file << "Unnamed repository; edit this file 'description' to "
+                        "name the repository.\n";
     description_file.close();
 }
 
-} // namespace minigit::application::init
+}  // namespace minigit::application::init

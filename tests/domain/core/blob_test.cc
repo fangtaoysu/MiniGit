@@ -1,8 +1,9 @@
-#include <gtest/gtest.h>
-#include <fstream>
-#include <filesystem>
-
 #include "domain/core/blob.h"
+
+#include <gtest/gtest.h>
+
+#include <filesystem>
+#include <fstream>
 
 using namespace minigit::domain::core;
 

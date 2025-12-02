@@ -1,8 +1,8 @@
 #pragma once
 
-#include <span>
-#include <cstdint>
 #include <array>
+#include <cstdint>
+#include <span>
 #include <string>
 
 namespace minigit::domain::core {
@@ -25,18 +25,17 @@ public:
 
     /**
      * @brief 从字节数据反序列化Blob对象
-     * 
+     *
      * @param data 包含Blob对象序列化数据的字节span
      * @return Blob 反序列化后的Blob对象
      */
     static Blob Deserialize(const std::span<const uint8_t>& data);
     /**
      * @brief 根据文件创建Blob对象
-     * 
+     *
      * @return std::span<const uint8_t> Blob对象的内容数据span
      */
     static Blob CreateFromFile(const std::string& file_path);
-
 
 private:
     // array是在栈上分配的，vector是在堆上分配的，因此当前场景下array性能更好
@@ -45,6 +44,4 @@ private:
     std::string header_;
 };
 
-
-
-} // namespace domain::core
+}  // namespace minigit::domain::core

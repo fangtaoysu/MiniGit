@@ -1,8 +1,11 @@
-#include "gtest/gtest.h"
 #include "domain/core/tree.h"
+
 #include <openssl/sha.h>
+
 #include <string>
 #include <vector>
+
+#include "gtest/gtest.h"
 
 namespace {
 std::string Sha1Hex(const std::string& s) {
@@ -20,7 +23,7 @@ std::string Sha1Hex(const std::string& s) {
 std::vector<uint8_t> ToBytes(const std::string& s) {
     return std::vector<uint8_t>(s.begin(), s.end());
 }
-}
+}  // namespace
 
 using namespace minigit::domain::core;
 
@@ -33,8 +36,7 @@ TEST(TreeTest, DeserializeComputesExpectedSha1) {
     auto expected = Sha1Hex(
         "100644 blob aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\tfile1.txt\n"
         "100755 blob bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\ttool.sh\n"
-        "040000 tree cccccccccccccccccccccccccccccccccccccccc\tsubdir\n"
-    );
+        "040000 tree cccccccccccccccccccccccccccccccccccccccc\tsubdir\n");
 
     auto sha = Tree::Deserialize(std::span<const uint8_t>(ToBytes(ser)));
     EXPECT_EQ(sha, expected);
@@ -45,13 +47,11 @@ TEST(TreeTest, AddEntryIsFunctionalAndImmutable) {
     auto s0 = t0.CalculateSha1();
 
     Tree t1 = t0.AddEntry("100644", "blob",
-                          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                          "a.txt");
+                          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "a.txt");
     auto s1 = t1.CalculateSha1();
 
     Tree t2 = t1.AddEntry("100755", "blob",
-                          "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                          "run.sh");
+                          "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "run.sh");
     auto s2 = t2.CalculateSha1();
 
     EXPECT_NE(s0, s1);
@@ -69,11 +69,9 @@ TEST(TreeTest, AddEntryIsFunctionalAndImmutable) {
 
 TEST(TreeTest, CalculateSha1ConsistencyWithDeserialize) {
     Tree t;
-    t = t.AddEntry("100644", "blob",
-                   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    t = t.AddEntry("100644", "blob", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                    "a.txt");
-    t = t.AddEntry("100644", "blob",
-                   "cccccccccccccccccccccccccccccccccccccccc",
+    t = t.AddEntry("100644", "blob", "cccccccccccccccccccccccccccccccccccccccc",
                    "c.txt");
     auto calc = t.CalculateSha1();
 

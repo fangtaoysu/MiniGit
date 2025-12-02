@@ -5,14 +5,28 @@
 
 namespace minigit::domain::storage::repositories {
 
-class IndexRepository {
-public:
-    void StageFile(const std::string& file_path, const std::string& blob_sha1);
-    void UnstageFile(const std::string& file_path);
-    bool IsStaged(const std::string& file_path);
-    std::unordered_map<std::string, std::string> GetStagedFiles();
-    void ClearStaged();
+// 索引条目：路径 -> 对象哈希
+struct IndexEntry {
+    std::string path;
+    std::string object_hash;
+    time_t timestamp;
 };
 
+class IndexRepository {
+public:
+    IndexRepository() = default;
+    ~IndexRepository() = default;
 
-} // namespace domain::storage::repositories
+    // 基本索引操作
+    bool Add(const std::string& path, const std::string& object_hash);
+    bool Remove(const std::string& path);
+
+    // 查询
+    std::string GetHash(const std::string& path) const;
+    bool Contains(const std::string& path) const;
+
+private:
+    std::unordered_map<std::string, IndexEntry> entries_;
+};
+
+}  // namespace minigit::domain::storage::repositories

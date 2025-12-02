@@ -1,27 +1,37 @@
 #pragma once
 
-#include <string>
 #include <memory>
-#include <vector>
+#include <string>
+#include <unordered_map>
 
 #include "domain/core/blob.h"
-#include "domain/core/commit.h"
-#include "domain/core/tree.h"
 
 namespace minigit::domain::storage::repositories {
 
 class ObjectRepository {
-public:    
-    bool StoreBlob(const minigit::domain::core::Blob& blob);
-    bool StoreCommit(const minigit::domain::core::Commit& commit);
-    bool StoreTree(const minigit::domain::core::Tree& tree);
-    
-    std::unique_ptr<minigit::domain::core::Blob> LoadBlob(const std::string& sha1);
-    std::unique_ptr<minigit::domain::core::Commit> LoadCommit(const std::string& sha1);
-    std::unique_ptr<minigit::domain::core::Tree> LoadTree(const std::string& sha1);
-    
-    bool Exists(const std::string& sha1);
-    std::vector<std::string> GetAllObjectHashes();
+public:
+    ObjectRepository() = default;
+    ~ObjectRepository() = default;
+
+    // 对象存储 - 使用core中的Blob对象
+    bool Store(const std::string& hash,
+               std::shared_ptr<minigit::domain::core::Blob> blob);
+    std::shared_ptr<minigit::domain::core::Blob> Retrieve(
+        const std::string& hash) const;
+    bool Remove(const std::string& hash);
+    bool Exists(const std::string& hash) const;
+
+    // 兼容接口 - 字符串内容存储
+    bool Store(const std::string& hash, const std::string& content);
+    std::string RetrieveContent(const std::string& hash) const;
+
+private:
+    std::unordered_map<std::string,
+                       std::shared_ptr<minigit::domain::core::Blob>>
+        objects_;
+
+    // 跟踪字符串内容的实际长度
+    std::unordered_map<std::string, size_t> content_lengths_;
 };
 
 }  // namespace minigit::domain::storage::repositories

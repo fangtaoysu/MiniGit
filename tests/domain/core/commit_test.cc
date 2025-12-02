@@ -1,14 +1,17 @@
-#include "gtest/gtest.h"
 #include "domain/core/commit.h"
+
 #include <openssl/sha.h>
+
 #include <string>
 #include <vector>
+
+#include "gtest/gtest.h"
 
 namespace {
 std::vector<uint8_t> ToBytes(const std::string& s) {
     return std::vector<uint8_t>(s.begin(), s.end());
 }
-}
+}  // namespace
 
 using namespace minigit::domain::core;
 
@@ -26,8 +29,10 @@ TEST(CommitTest, DeserializeParsesFields) {
 
     EXPECT_EQ(c.GetTreeSha1(), "abcdef1234567890abcdef1234567890abcdef12");
     ASSERT_EQ(c.GetParentCommits().size(), 2u);
-    EXPECT_EQ(c.GetParentCommits()[0], "1111111111111111111111111111111111111111");
-    EXPECT_EQ(c.GetParentCommits()[1], "2222222222222222222222222222222222222222");
+    EXPECT_EQ(c.GetParentCommits()[0],
+              "1111111111111111111111111111111111111111");
+    EXPECT_EQ(c.GetParentCommits()[1],
+              "2222222222222222222222222222222222222222");
     EXPECT_EQ(c.GetAuthor(), "Alice <alice@example.com>");
     EXPECT_EQ(c.GetCommitter(), "Bob <bob@example.com>");
     EXPECT_EQ(c.GetMessage(), "Initial commit message\nSecond line\n");
